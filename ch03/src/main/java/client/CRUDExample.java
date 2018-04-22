@@ -57,7 +57,7 @@ public class CRUDExample {
       System.out.println("Value only: " + Bytes.toString(val));
 
       Delete delete = new Delete(Bytes.toBytes("row1"));
-      delete.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"));
+      delete.deleteColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"));
       table.delete(delete);
 
       Scan scan2 = new Scan();

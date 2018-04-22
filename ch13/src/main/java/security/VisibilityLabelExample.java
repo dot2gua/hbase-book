@@ -35,7 +35,7 @@ public class VisibilityLabelExample {
       @Override
       public Void run() {
         try {
-          VisibilityClient.addLabels(user.getConnection(), labels); // co VisibilityLabelExample-01-Helper Helper method to execute the method in the context of the authenticated user.
+          VisibilityClient.addLabels(user.getConnection().getConfiguration(), labels); // co VisibilityLabelExample-01-Helper Helper method to execute the method in the context of the authenticated user.
         } catch (Throwable throwable) {
           System.out.println("addLabels() failed with: " +
             throwable.getMessage().split("\n")[0]);
@@ -128,7 +128,7 @@ public class VisibilityLabelExample {
         try {
           // vv VisibilityLabelExample
     /*  */VisibilityLabelsProtos.GetAuthsResponse response =
-    /*  */  VisibilityClient.getAuths(user.getConnection(), assignee);
+    /*  */  VisibilityClient.getAuths(user.getConnection().getConfiguration(), assignee);
     /*  */System.out.println("User Authorizations for " + assignee + ":");
     /*  */int count = 0;
     /*  */for (ByteString auth : response.getAuthList()) {
@@ -212,7 +212,8 @@ public class VisibilityLabelExample {
     // ^^ VisibilityLabelExample
     System.out.println("Superuser: Add labels...");
     // vv VisibilityLabelExample
-    addLabels(superuser, "low", "medium", "high"); // co VisibilityLabelExample-04-AddLabels Add the system-wide labels.
+    addLabels(superuser, "low", "medium", "high"); 
+    // co VisibilityLabelExample-04-AddLabels Add the system-wide labels.
 
     // ^^ VisibilityLabelExample
     System.out.println("Superuser: Print current labels...");
@@ -223,7 +224,8 @@ public class VisibilityLabelExample {
     System.out.println("Superuser: Add authorization \"low\" and " +
       "\"medium\" for admin...");
     // vv VisibilityLabelExample
-    setUserAuthorization(superuser, admin.getShortUserName(), // co VisibilityLabelExample-05-AddAuth Assign the labels to each user, in the required combination.
+    setUserAuthorization(superuser, admin.getShortUserName(), 
+                         // co VisibilityLabelExample-05-AddAuth Assign the labels to each user, in the required combination.
       "low", "medium");
     // ^^ VisibilityLabelExample
     System.out.println("Superuser: Add authorization \"low\" for application...");
@@ -239,7 +241,8 @@ public class VisibilityLabelExample {
     // ^^ VisibilityLabelExample
     System.out.println("Admin: Print user authorizations...");
     // vv VisibilityLabelExample
-    printUserAuthorization(admin, admin.getShortUserName()); // co VisibilityLabelExample-06-PrintAuth This and the next call will fail due to insufficient rights.
+    printUserAuthorization(admin, admin.getShortUserName()); 
+    // co VisibilityLabelExample-06-PrintAuth This and the next call will fail due to insufficient rights.
     printUserAuthorization(admin, app1.getShortUserName());
 
     // ^^ VisibilityLabelExample
@@ -254,7 +257,8 @@ public class VisibilityLabelExample {
     Put put = new Put(Bytes.toBytes("row-98"));
     put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("col-medium-high"),
       Bytes.toBytes("medium and high visibility"));
-    put.setCellVisibility(new CellVisibility("medium & high")); // co VisibilityLabelExample-07-AddCell Add new cells with specific cell visibility expressions set.
+    put.setCellVisibility(new CellVisibility("medium & high")); 
+    // co VisibilityLabelExample-07-AddCell Add new cells with specific cell visibility expressions set.
     superuser.put(tableName, put);
 
     // ^^ VisibilityLabelExample
@@ -269,28 +273,33 @@ public class VisibilityLabelExample {
     // ^^ VisibilityLabelExample
     System.out.println("Admin & Application: Scan table to check results...");
     // vv VisibilityLabelExample
-    admin.scan(tableName, new Scan()); // co VisibilityLabelExample-08-Scans Scan the table twice, as different users. The admin can see more than the application due to the visibility expressions.
+    admin.scan(tableName, new Scan()); 
+    // co VisibilityLabelExample-08-Scans Scan the table twice, as different users. The admin can see more than the application due to the visibility expressions.
     app1.scan(tableName, new Scan());
 
     // ^^ VisibilityLabelExample
     System.out.println("Admin: Scan table again, but with reduced visbility...");
     // vv VisibilityLabelExample
     admin.scan(tableName,
-      new Scan().setAuthorizations(new Authorizations("low"))); // co VisibilityLabelExample-09-SetAuthScan1 Lower the visibility for the scans. Result will include subset of cells.
+      new Scan().setAuthorizations(new Authorizations("low"))); 
+    // co VisibilityLabelExample-09-SetAuthScan1 Lower the visibility for the scans. Result will include subset of cells.
     admin.scan(tableName,
-      new Scan().setAuthorizations(new Authorizations("high")));  // co VisibilityLabelExample-10-SetAuthScan2 Raise the visibility for the scans. Result will include no labelled cell as the user is not allowed to see those.
+      new Scan().setAuthorizations(new Authorizations("high")));  
+    // co VisibilityLabelExample-10-SetAuthScan2 Raise the visibility for the scans. Result will include no labelled cell as the user is not allowed to see those.
 
     // ^^ VisibilityLabelExample
     System.out.println("Superuser: Give application system label access and try scan again...");
     // vv VisibilityLabelExample
-    setUserAuthorization(superuser, app1.getShortUserName(), "system"); // co VisibilityLabelExample-11-System Assign special "system" label to application, retry the scan and see how it returns all labelled cells now.
+    setUserAuthorization(superuser, app1.getShortUserName(), "system"); 
+    // co VisibilityLabelExample-11-System Assign special "system" label to application, retry the scan and see how it returns all labelled cells now.
     printUserAuthorization(superuser, app1.getShortUserName());
     app1.scan(tableName, new Scan());
 
     // ^^ VisibilityLabelExample
     System.out.println("Superuser: Remove labels from admin user and try scan again...");
     // vv VisibilityLabelExample
-    removeUserAuthorization(superuser, admin.getShortUserName(), "medium"); // co VisibilityLabelExample-12-ClearAuth Remove one label from admin and use scan to show the reduced output.
+    removeUserAuthorization(superuser, admin.getShortUserName(), "medium"); 
+    // co VisibilityLabelExample-12-ClearAuth Remove one label from admin and use scan to show the reduced output.
     printUserAuthorization(superuser, admin.getShortUserName());
     admin.scan(tableName, new Scan());
 

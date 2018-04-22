@@ -10,7 +10,6 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
-import org.apache.hadoop.hbase.client.RegionLocator;
 import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.coprocessor.Batch;
 import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
@@ -40,19 +39,19 @@ public class EndpointCombinedExample {
     HConnection connection = HConnectionManager.createConnection(conf);
     HBaseAdmin admin = new HBaseAdmin(connection);
     try {
-      admin.split(TableName.valueOf("testtable"), Bytes.toBytes("row3"));
-    } catch (IOException e) {
+      admin.split(TableName.valueOf("testtable").getName(), Bytes.toBytes("row3"));
+    } catch (IOException | InterruptedException e) {
       e.printStackTrace();
     }
     TableName name = TableName.valueOf("testtable");
     HTableInterface table = connection.getTable(name);
     // wait for the split to be done
-    RegionLocator locator = connection.getRegionLocator(name);
-    while (locator.getAllRegionLocations().size() < 2)
-      try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e) {
-      }
+//    RegionLocator locator = connection.getRegionLocator(name);
+//    while (locator.getAllRegionLocations().size() < 2)
+//      try {
+//        Thread.sleep(1000);
+//      } catch (InterruptedException e) {
+//      }
     try {
       //vv EndpointCombinedExample
       final RowCounterProtos.CountRequest request =

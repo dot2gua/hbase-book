@@ -22,7 +22,7 @@ import coprocessor.generated.RowCounterProtos.RowCountService;
 // cc EndpointBatchExample Example using the custom row-count endpoint in batch mode
 public class EndpointBatchExample {
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException, InterruptedException {
     Configuration conf = HBaseConfiguration.create();
     TableName tableName = TableName.valueOf("testtable");
     HConnection connection = HConnectionManager.createConnection(conf);
@@ -42,7 +42,7 @@ public class EndpointBatchExample {
       null, null);
     HBaseAdmin admin = new HBaseAdmin(connection);
     try {
-      admin.split(tableName, Bytes.toBytes("row3"));
+      admin.split(tableName.getName(), Bytes.toBytes("row3"));
     } catch (IOException e) {
       e.printStackTrace();
     }

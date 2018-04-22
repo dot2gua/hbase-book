@@ -5,11 +5,6 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.NavigableSet;
 
-import com.google.common.collect.ImmutableList;
-import com.google.protobuf.RpcCallback;
-import com.google.protobuf.RpcController;
-import com.google.protobuf.Service;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -17,6 +12,7 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.CoprocessorEnvironment;
 import org.apache.hadoop.hbase.HRegionInfo;
+import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.Append;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Durability;
@@ -37,13 +33,11 @@ import org.apache.hadoop.hbase.io.FSDataInputStreamWrapper;
 import org.apache.hadoop.hbase.io.Reference;
 import org.apache.hadoop.hbase.io.hfile.CacheConfig;
 import org.apache.hadoop.hbase.protobuf.ResponseConverter;
-
 import org.apache.hadoop.hbase.regionserver.DeleteTracker;
 import org.apache.hadoop.hbase.regionserver.HRegion;
 import org.apache.hadoop.hbase.regionserver.InternalScanner;
 import org.apache.hadoop.hbase.regionserver.KeyValueScanner;
 import org.apache.hadoop.hbase.regionserver.MiniBatchOperationInProgress;
-import org.apache.hadoop.hbase.regionserver.Region;
 import org.apache.hadoop.hbase.regionserver.RegionScanner;
 import org.apache.hadoop.hbase.regionserver.ScanType;
 import org.apache.hadoop.hbase.regionserver.Store;
@@ -52,7 +46,11 @@ import org.apache.hadoop.hbase.regionserver.compactions.CompactionRequest;
 import org.apache.hadoop.hbase.regionserver.wal.HLogKey;
 import org.apache.hadoop.hbase.regionserver.wal.WALEdit;
 import org.apache.hadoop.hbase.util.Pair;
-import org.apache.hadoop.hbase.wal.WALKey;
+
+import com.google.common.collect.ImmutableList;
+import com.google.protobuf.RpcCallback;
+import com.google.protobuf.RpcController;
+import com.google.protobuf.Service;
 
 import coprocessor.generated.ScanControlProtos;
 
@@ -267,7 +265,7 @@ public class ScanControlObserverEndpoint
 
   @Override
   public void postSplit(ObserverContext<RegionCoprocessorEnvironment> c,
-    Region l, Region r) throws IOException {
+                        HRegion l, HRegion r) throws IOException {
 
   }
 
@@ -557,12 +555,12 @@ public class ScanControlObserverEndpoint
 
   }
 
-  @Override
-  public void preWALRestore(
-    ObserverContext<? extends RegionCoprocessorEnvironment> ctx,
-    HRegionInfo info, WALKey logKey, WALEdit logEdit) throws IOException {
-
-  }
+//  @Override
+//  public void preWALRestore(
+//    ObserverContext<? extends RegionCoprocessorEnvironment> ctx,
+//    HRegionInfo info, WALKey logKey, WALEdit logEdit) throws IOException {
+//
+//  }
 
   @Override
   public void preWALRestore(ObserverContext<RegionCoprocessorEnvironment> ctx,
@@ -570,12 +568,12 @@ public class ScanControlObserverEndpoint
 
   }
 
-  @Override
-  public void postWALRestore(
-    ObserverContext<? extends RegionCoprocessorEnvironment> ctx,
-    HRegionInfo info, WALKey logKey, WALEdit logEdit) throws IOException {
-
-  }
+//  @Override
+//  public void postWALRestore(
+//    ObserverContext<? extends RegionCoprocessorEnvironment> ctx,
+//    HRegionInfo info, WALKey logKey, WALEdit logEdit) throws IOException {
+//
+//  }
 
   @Override
   public void postWALRestore(ObserverContext<RegionCoprocessorEnvironment> ctx,
@@ -627,6 +625,24 @@ public class ScanControlObserverEndpoint
     throws IOException {
     return null;
   }
+
+@Override
+public void preGet(ObserverContext<RegionCoprocessorEnvironment> c,
+                   Get get,
+                   List<KeyValue> result)
+        throws IOException {
+    // TODO Auto-generated method stub
+    
+}
+
+@Override
+public void postGet(ObserverContext<RegionCoprocessorEnvironment> c,
+                    Get get,
+                    List<KeyValue> result)
+        throws IOException {
+    // TODO Auto-generated method stub
+    
+}
 
 
   // vv ScanControlObserverEndpoint

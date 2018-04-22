@@ -7,7 +7,10 @@ import org.apache.hadoop.conf.Configuration;
 
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Get;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.security.SecurityCapability;
@@ -71,15 +74,15 @@ public class AccessControlExample {
 
         System.out.println("Superuser: Report AccessController features...");
         System.out.println("  Access Controller Running: " +
-          AccessControlClient.isAccessControllerRunning(connection)); // co AccessControlExample-05-PrintAccCtlOpts Report the features enabled regarding access control.
+          AccessControlClient.isAccessControllerRunning(connection.getConfiguration())); // co AccessControlExample-05-PrintAccCtlOpts Report the features enabled regarding access control.
         System.out.println("  Authorization Enabled: " +
-          AccessControlClient.isAuthorizationEnabled(connection));
+          AccessControlClient.isAuthorizationEnabled(connection.getConfiguration()));
         System.out.println("  Cell Authorization Enabled: " +
-          AccessControlClient.isCellAuthorizationEnabled(connection));
+          AccessControlClient.isCellAuthorizationEnabled(connection.getConfiguration()));
 
         List<UserPermission> ups = null;
         try {
-          ups = AccessControlClient.getUserPermissions(connection, ".*"); // co AccessControlExample-06-PrintPerms Print the current permissions for all tables.
+          ups = AccessControlClient.getUserPermissions(connection.getConfiguration(), ".*"); // co AccessControlExample-06-PrintPerms Print the current permissions for all tables.
           System.out.println("Superuser: User permissions:");
           for (UserPermission perm : ups) {
             System.out.println("  " + perm);

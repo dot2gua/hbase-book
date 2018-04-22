@@ -17,6 +17,7 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.CoprocessorEnvironment;
 import org.apache.hadoop.hbase.HRegionInfo;
+import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.Append;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Durability;
@@ -42,7 +43,6 @@ import org.apache.hadoop.hbase.regionserver.HRegion;
 import org.apache.hadoop.hbase.regionserver.InternalScanner;
 import org.apache.hadoop.hbase.regionserver.KeyValueScanner;
 import org.apache.hadoop.hbase.regionserver.MiniBatchOperationInProgress;
-import org.apache.hadoop.hbase.regionserver.Region;
 import org.apache.hadoop.hbase.regionserver.RegionScanner;
 import org.apache.hadoop.hbase.regionserver.ScanType;
 import org.apache.hadoop.hbase.regionserver.Store;
@@ -51,7 +51,6 @@ import org.apache.hadoop.hbase.regionserver.compactions.CompactionRequest;
 import org.apache.hadoop.hbase.regionserver.wal.HLogKey;
 import org.apache.hadoop.hbase.regionserver.wal.WALEdit;
 import org.apache.hadoop.hbase.util.Pair;
-import org.apache.hadoop.hbase.wal.WALKey;
 
 import coprocessor.generated.ObserverStatisticsProtos;
 
@@ -293,7 +292,7 @@ public class ObserverStatisticsEndpoint
   @Override
   public void postSplit(
     ObserverContext<RegionCoprocessorEnvironment> observerContext,
-    Region region, Region region1) throws IOException {
+    HRegion region, HRegion region1) throws IOException {
     addCallCount("postSplit");
   }
 
@@ -655,13 +654,13 @@ public class ObserverStatisticsEndpoint
     addCallCount("postScannerClose");
   }
 
-  @Override
-  public void preWALRestore(
-    ObserverContext<? extends RegionCoprocessorEnvironment> observerContext,
-    HRegionInfo hRegionInfo, WALKey walKey, WALEdit walEdit)
-    throws IOException {
-    addCallCount("preWALRestore1");
-  }
+//  @Override
+//  public void preWALRestore(
+//    ObserverContext<? extends RegionCoprocessorEnvironment> observerContext,
+//    HRegionInfo hRegionInfo, WALKey walKey, WALEdit walEdit)
+//    throws IOException {
+//    addCallCount("preWALRestore1");
+//  }
 
   @Override
   public void preWALRestore(
@@ -671,13 +670,13 @@ public class ObserverStatisticsEndpoint
     addCallCount("preWALRestore2");
   }
 
-  @Override
-  public void postWALRestore(
-    ObserverContext<? extends RegionCoprocessorEnvironment> observerContext,
-    HRegionInfo hRegionInfo, WALKey walKey, WALEdit walEdit)
-    throws IOException {
-    addCallCount("postWALRestore1");
-  }
+//  @Override
+//  public void postWALRestore(
+//    ObserverContext<? extends RegionCoprocessorEnvironment> observerContext,
+//    HRegionInfo hRegionInfo, WALKey walKey, WALEdit walEdit)
+//    throws IOException {
+//    addCallCount("postWALRestore1");
+//  }
 
   @Override
   public void postWALRestore(
@@ -744,5 +743,24 @@ public class ObserverStatisticsEndpoint
     return deleteTracker;
   }
   // vv ObserverStatisticsEndpoint
+
+@Override
+public void postGet(ObserverContext<RegionCoprocessorEnvironment> arg0,
+                    Get arg1,
+                    List<KeyValue> arg2)
+        throws IOException {
+    // TODO Auto-generated method stub
+    
+}
+
+
+@Override
+public void preGet(ObserverContext<RegionCoprocessorEnvironment> arg0,
+                   Get arg1,
+                   List<KeyValue> arg2)
+        throws IOException {
+    // TODO Auto-generated method stub
+    
+}
 }
 // ^^ ObserverStatisticsEndpoint

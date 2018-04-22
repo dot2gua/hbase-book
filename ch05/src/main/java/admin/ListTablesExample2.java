@@ -46,19 +46,19 @@ public class ListTablesExample2 {
     print(htds);
     System.out.println("List: .*, including system tables");
     // vv ListTablesExample2
-    htds = admin.listTables(".*", true);
+//    htds = admin.listTables(".*", true);
     // ^^ ListTablesExample2
     print(htds);
 
     System.out.println("List: hbase:.*, including system tables");
     // vv ListTablesExample2
-    htds = admin.listTables("hbase:.*", true);
+//    htds = admin.listTables("hbase:.*", true);
     // ^^ ListTablesExample2
     print(htds);
 
     System.out.println("List: def.*:.*, including system tables");
     // vv ListTablesExample2
-    htds = admin.listTables("def.*:.*", true);
+//    htds = admin.listTables("def.*:.*", true);
     // ^^ ListTablesExample2
     print(htds);
 

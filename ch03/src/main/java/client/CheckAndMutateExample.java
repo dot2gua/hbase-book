@@ -49,7 +49,7 @@ public class CheckAndMutateExample {
       4, Bytes.toBytes("val100"));
 
     Delete delete = new Delete(Bytes.toBytes("row1"));
-    delete.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual2"));
+    delete.deleteColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual2"));
 
     RowMutations mutations = new RowMutations(Bytes.toBytes("row1"));
     mutations.add(put);
@@ -61,7 +61,7 @@ public class CheckAndMutateExample {
     System.out.println("Mutate 1 successful: " + res1);
 
     Put put2 = new Put(Bytes.toBytes("row1"));
-    put2.addColumn(Bytes.toBytes("colfam2"), Bytes.toBytes("qual1"), // co CheckAndMutateExample-2-Put1 Update the checked column to have a value greater than what we check for.
+    put2.add(Bytes.toBytes("colfam2"), Bytes.toBytes("qual1"), // co CheckAndMutateExample-2-Put1 Update the checked column to have a value greater than what we check for.
       4, Bytes.toBytes("val2"));
     table.put(put2);
 

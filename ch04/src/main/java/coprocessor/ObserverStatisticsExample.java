@@ -183,7 +183,7 @@ public class ObserverStatisticsExample {
 
       System.out.println("Apply single delete...");
       Delete delete = new Delete(Bytes.toBytes("row10"));
-      delete.addColumn(Bytes.toBytes("colfam1"),
+      delete.deleteColumn(Bytes.toBytes("colfam1"),
         Bytes.toBytes("qual10"));
       table.delete(delete);
       printStatistics(true, true);
@@ -212,7 +212,7 @@ public class ObserverStatisticsExample {
 
       System.out.println("Apply checkAndDelete (failing)...");
       delete = new Delete(Bytes.toBytes("row10"));
-      delete.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual17"));
+      delete.deleteColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual17"));
       cap = table.checkAndDelete(Bytes.toBytes("row10"),
         Bytes.toBytes("colfam1"), Bytes.toBytes("qual15"), null, delete);
       System.out.println("  -> success: " + cap);
@@ -230,7 +230,7 @@ public class ObserverStatisticsExample {
       put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual20"),
         Bytes.toBytes("val20"));
       delete = new Delete(Bytes.toBytes("row10"));
-      delete.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual17"));
+      delete.deleteColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual17"));
       mutations.add(put);
       mutations.add(delete);
       cap = table.checkAndMutate(Bytes.toBytes("row10"),

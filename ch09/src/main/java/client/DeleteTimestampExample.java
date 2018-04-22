@@ -51,8 +51,8 @@ public class DeleteTimestampExample {
     // vv DeleteTimestampExample
 
     Delete delete = new Delete(ROW1); // co DeleteTimestampExample-3-Delete Delete the newest two versions.
-    delete.addColumn(COLFAM1, QUAL1, 5);
-    delete.addColumn(COLFAM1, QUAL1, 6);
+    delete.deleteColumn(COLFAM1, QUAL1, 5);
+    delete.deleteColumn(COLFAM1, QUAL1, 6);
     table.delete(delete);
     // ^^ DeleteTimestampExample
 

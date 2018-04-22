@@ -42,7 +42,7 @@ public class EndpointProxyExample {
       new String[]{"row1", "row2", "row3", "row4", "row5"}, null, null);
     HBaseAdmin admin = new HBaseAdmin(connection);
     try {
-      admin.split(tableName, Bytes.toBytes("row3"));
+      admin.split(tableName.getName(), Bytes.toBytes("row3"));
     } catch (Exception e) {
       e.printStackTrace();
     }

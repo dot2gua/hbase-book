@@ -37,9 +37,9 @@ public class MultipleColumnPrefixFilterExample {
       Bytes.toBytes("col-1"), Bytes.toBytes("col-2")
     });
 
-    Scan scan = new Scan()
-      .setRowPrefixFilter(Bytes.toBytes("row-1")) // co MultipleColumnPrefixFilterExample-1-Row Limit to rows starting with a specific prefix.
-      .setFilter(filter);
+    Scan scan = new Scan();
+//            scan.setRowPrefixFilter(Bytes.toBytes("row-1")); // co MultipleColumnPrefixFilterExample-1-Row Limit to rows starting with a specific prefix.
+            scan.setFilter(filter);
     ResultScanner scanner = table.getScanner(scan);
     // ^^ MultipleColumnPrefixFilterExample
     System.out.println("Results of scan:");

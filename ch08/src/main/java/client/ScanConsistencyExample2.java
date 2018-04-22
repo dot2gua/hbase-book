@@ -21,7 +21,7 @@ import util.HBaseHelper;
 // cc ScanConsistencyExample2 Checks the scans behavior during concurrent modifications
 public class ScanConsistencyExample2 {
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException, InterruptedException {
     Configuration conf = HBaseConfiguration.create();
 
     HBaseHelper helper = HBaseHelper.getHelper(conf);
@@ -57,13 +57,13 @@ public class ScanConsistencyExample2 {
     System.out.println("Flushing and splitting table...");
     // vv ScanConsistencyExample2
     HBaseAdmin admin = new HBaseAdmin(connection);
-    admin.flush(tableName); // co ScanConsistencyExample2-1-Flush Flush table and wait a little while for the operation to complete.
+    admin.flush(tableName.getNameAsString()); // co ScanConsistencyExample2-1-Flush Flush table and wait a little while for the operation to complete.
     try {
       Thread.currentThread().sleep(4000);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
-    admin.split(tableName, Bytes.toBytes("row-3")); // co ScanConsistencyExample2-2-Split Split the table and wait until split operation has completed.
+    admin.split(tableName.getName(), Bytes.toBytes("row-3")); // co ScanConsistencyExample2-2-Split Split the table and wait until split operation has completed.
     while (admin.getTableRegions(tableName).size() == 1) {  }
 
     // ^^ ScanConsistencyExample2

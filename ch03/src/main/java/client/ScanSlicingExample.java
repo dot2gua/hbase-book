@@ -24,13 +24,13 @@ public class ScanSlicingExample {
   private static void scan(int num, int caching, int batch, int offset,
     int maxResults, int maxResultSize, boolean dump) throws IOException {
     int count = 0;
-    Scan scan = new Scan()
-      .setCaching(caching)
-      .setBatch(batch)
-      .setRowOffsetPerColumnFamily(offset)
-      .setMaxResultsPerColumnFamily(maxResults)
-      .setMaxResultSize(maxResultSize)
-      .setScanMetricsEnabled(true);
+    Scan scan = new Scan();
+    scan.setCaching(caching);
+    scan.setBatch(batch);
+    scan.setRowOffsetPerColumnFamily(offset);
+    scan.setMaxResultsPerColumnFamily(maxResults);
+    scan.setMaxResultSize(maxResultSize);
+//    scan.setScanMetricsEnabled(true);
     ResultScanner scanner = table.getScanner(scan);
     System.out.println("Scan #" + num + " running...");
     for (Result result : scanner) {
@@ -38,11 +38,11 @@ public class ScanSlicingExample {
       if (dump) System.out.println("Result [" + count + "]:" + result);
     }
     scanner.close();
-    ScanMetrics metrics = scan.getScanMetrics();
-    System.out.println("Caching: " + caching + ", Batch: " + batch +
-      ", Offset: " + offset + ", maxResults: " + maxResults +
-      ", maxSize: " + maxResultSize + ", Results: " + count +
-      ", RPCs: " + metrics.countOfRPCcalls);
+//    ScanMetrics metrics = scan.getScanMetrics();
+//    System.out.println("Caching: " + caching + ", Batch: " + batch +
+//      ", Offset: " + offset + ", maxResults: " + maxResults +
+//      ", maxSize: " + maxResultSize + ", Results: " + count +
+//      ", RPCs: " + metrics.countOfRPCcalls);
   }
 
   public static void main(String[] args) throws IOException {

@@ -41,37 +41,37 @@ public class ListTablesExample3 {
 
     System.out.println("List: .*");
     // vv ListTablesExample3
-    TableName[] names = admin.listTableNames(".*");
+    TableName[] names = admin.listTableNames();
     // ^^ ListTablesExample3
     print(names);
     System.out.println("List: .*, including system tables");
     // vv ListTablesExample3
-    names = admin.listTableNames(".*", true);
+//    names = admin.listTableNames(".*", true);
     // ^^ ListTablesExample3
     print(names);
 
     System.out.println("List: hbase:.*, including system tables");
     // vv ListTablesExample3
-    names = admin.listTableNames("hbase:.*", true);
+//    names = admin.listTableNames("hbase:.*", true);
     // ^^ ListTablesExample3
     print(names);
 
     System.out.println("List: def.*:.*, including system tables");
     // vv ListTablesExample3
-    names = admin.listTableNames("def.*:.*", true);
+//    names = admin.listTableNames("def.*:.*", true);
     // ^^ ListTablesExample3
     print(names);
 
     System.out.println("List: test.*");
     // vv ListTablesExample3
-    names = admin.listTableNames("test.*");
+//    names = admin.listTableNames("test.*");
     // ^^ ListTablesExample3
     print(names);
 
     System.out.println("List: .*2, using Pattern");
     // vv ListTablesExample3
-    Pattern pattern = Pattern.compile(".*2");
-    names = admin.listTableNames(pattern);
+//    Pattern pattern = Pattern.compile(".*2");
+//    names = admin.listTableNames(pattern);
     // ^^ ListTablesExample3
     print(names);
 

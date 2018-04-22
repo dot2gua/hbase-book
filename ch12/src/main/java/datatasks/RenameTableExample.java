@@ -3,7 +3,6 @@ package datatasks;
 import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
-
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellScanner;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -11,10 +10,10 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import util.HBaseHelper;
@@ -23,7 +22,7 @@ import util.HBaseHelper;
 public class RenameTableExample {
 
   // vv RenameTableExample
-  private static void renameTable(Admin admin, TableName oldName, TableName newName)
+  private static void renameTable(HBaseAdmin admin, TableName oldName, TableName newName)
       throws IOException {
     String snapshotName = "SnapRename-" + System.currentTimeMillis(); // co RenameTableExample-01-RandomName Create a unique (timestamped) snapshot name avoiding collisions.
     admin.disableTable(oldName); // co RenameTableExample-02-DisableTable Disable table to avoid any concurrent writes. This is optional and could be done on demand.
@@ -35,6 +34,8 @@ public class RenameTableExample {
     try {
       admin.cloneSnapshot(snapshotName, newName); // co RenameTableExample-05-RestoreSnap Restore the snapshot, and remove the old table.
       admin.deleteTable(oldName);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
     } finally {
       admin.deleteSnapshot(snapshotName); // co RenameTableExample-06-DropSnap Drop the snapshot to clean up behind the rename operation.
     }

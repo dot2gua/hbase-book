@@ -42,13 +42,13 @@ public class MultiRowMutationExample {
     TableName tableName = TableName.valueOf("testtable");
 
     // vv MultiRowMutationExample
-    HTableDescriptor htd = new HTableDescriptor(tableName)
-      .addFamily(new HColumnDescriptor("colfam1"))
-      .addCoprocessor(MultiRowMutationEndpoint.class.getCanonicalName(), // co MultiRowMutationExample-01-SetCopro Set the coprocessor explicitly for the table.
-        null, Coprocessor.PRIORITY_SYSTEM, null)
-      .setValue(HTableDescriptor.SPLIT_POLICY,
-        KeyPrefixRegionSplitPolicy.class.getName()) // co MultiRowMutationExample-02-SetSplitPolicy Set the supplied split policy.
-      .setValue(KeyPrefixRegionSplitPolicy.PREFIX_LENGTH_KEY,
+    HTableDescriptor htd = new HTableDescriptor(tableName);
+    htd.addFamily(new HColumnDescriptor("colfam1"));
+    htd.addCoprocessor(MultiRowMutationEndpoint.class.getCanonicalName(), // co MultiRowMutationExample-01-SetCopro Set the coprocessor explicitly for the table.
+        null, Coprocessor.PRIORITY_SYSTEM, null);
+    htd.setValue(HTableDescriptor.SPLIT_POLICY,
+        KeyPrefixRegionSplitPolicy.class.getName()); // co MultiRowMutationExample-02-SetSplitPolicy Set the supplied split policy.
+    htd.setValue(KeyPrefixRegionSplitPolicy.PREFIX_LENGTH_KEY,
         String.valueOf(2)); // co MultiRowMutationExample-03-SetPrefixLen Set the length of the prefix keeping entities together to two.
 
     // ^^ MultiRowMutationExample
@@ -78,7 +78,7 @@ public class MultiRowMutationExample {
     // ^^ MultiRowMutationExample
     System.out.println("Flushing table...");
     // vv MultiRowMutationExample
-    admin.flush(tableName); // co MultiRowMutationExample-06-Flush Force a flush of the created data.
+    admin.flush(tableName.getNameAsString()); // co MultiRowMutationExample-06-Flush Force a flush of the created data.
     Thread.sleep(3 * 1000L);
 
     List<HRegionInfo> regions = admin.getTableRegions(tableName);
@@ -88,7 +88,7 @@ public class MultiRowMutationExample {
     System.out.println("Number of regions: " + numRegions);
     System.out.println("Splitting table...");
     // vv MultiRowMutationExample
-    admin.split(tableName); // co MultiRowMutationExample-07-Split Subsequently split the table to test the split policy.
+    admin.split(tableName.getNameAsString()); // co MultiRowMutationExample-07-Split Subsequently split the table to test the split policy.
     do {
       regions = admin.getTableRegions(tableName);
       Thread.sleep(1 * 1000L);

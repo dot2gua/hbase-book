@@ -24,20 +24,20 @@ public class ScanCacheBatchExample {
   private static void scan(int caching, int batch, boolean small)
   throws IOException {
     int count = 0;
-    Scan scan = new Scan()
-      .setCaching(caching)  // co ScanCacheBatchExample-1-Set Set caching and batch parameters.
-      .setBatch(batch)
-      .setSmall(small)
-      .setScanMetricsEnabled(true);
+    Scan scan = new Scan();
+    scan.setCaching(caching);  // co ScanCacheBatchExample-1-Set Set caching and batch parameters.
+    scan.setBatch(batch);
+    scan.setSmall(small);
+//    scan.setScanMetricsEnabled(true);
     ResultScanner scanner = table.getScanner(scan);
     for (Result result : scanner) {
       count++; // co ScanCacheBatchExample-2-Count Count the number of Results available.
     }
     scanner.close();
-    ScanMetrics metrics = scan.getScanMetrics();
-    System.out.println("Caching: " + caching + ", Batch: " + batch +
-      ", Small: " + small + ", Results: " + count +
-      ", RPCs: " + metrics.countOfRPCcalls);
+//    ScanMetrics metrics = scan.getScanMetrics();
+//    System.out.println("Caching: " + caching + ", Batch: " + batch +
+//      ", Small: " + small + ", Results: " + count +
+//      ", RPCs: " + metrics.countOfRPCcalls);
   }
 
   public static void main(String[] args) throws IOException {
