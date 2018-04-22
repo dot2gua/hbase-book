@@ -6,12 +6,10 @@ import java.util.List;
 import org.apache.hadoop.conf.Configuration;
 
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.Get;
+import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.client.security.SecurityCapability;
 
 import org.apache.hadoop.hbase.security.access.AccessControlClient;
@@ -61,9 +59,9 @@ public class AccessControlExample {
     superuser.doAs(new PrivilegedExceptionAction<Void>() { // co AccessControlExample-02-DoAsSuperuser Run the next commands as the superuser.
       @Override
       public Void run() throws Exception {
-        Connection connection = superuser.getConnection(); // co AccessControlExample-03-GetConn Get dedicated connection for authenticated user.
+        HConnection connection = superuser.getConnection(); // co AccessControlExample-03-GetConn Get dedicated connection for authenticated user.
         Admin admin = connection.getAdmin();
-        Table table = connection.getTable(tableName);
+        HTableInterface table = connection.getTable(tableName);
 
         List<SecurityCapability> sc = admin.getSecurityCapabilities(); // co AccessControlExample-04-ListCaps List the security capabilities as reported from the Master.
         System.out.println("Superuser: Available security capabilities:");
@@ -133,7 +131,7 @@ public class AccessControlExample {
     System.out.println("Application: Write into table...");
     // vv AccessControlExample
     Put put = new Put(Bytes.toBytes("row-1"));
-    put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("col-acl"),
+    put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("col-acl"),
       Bytes.toBytes("val-acl"));
     app1.put(tableName, put); // co AccessControlExample-10-WriteColumn Insert a value into the granted column.
     // ^^ AccessControlExample
@@ -170,7 +168,7 @@ public class AccessControlExample {
       "the application...");
     // vv AccessControlExample
     put = new Put(Bytes.toBytes("row-1"));
-    put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("col-admin"),
+    put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("col-admin"),
       Bytes.toBytes("val-admin"));
     put.setACL(app1.getShortUserName(),
       new Permission(Permission.Action.READ)); // co AccessControlExample-13-AddCellAcl Admin putting a cell with read permissions for the application.

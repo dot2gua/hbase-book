@@ -8,8 +8,8 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import util.HBaseHelper;
@@ -24,7 +24,7 @@ public class TableOperationsExample {
     helper.dropTable("testtable");
 
     // vv TableOperationsExample
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     Admin admin = connection.getAdmin();
 
     TableName tableName = TableName.valueOf("testtable");
@@ -51,10 +51,10 @@ public class TableOperationsExample {
     // vv TableOperationsExample
     admin.disableTable(tableName);
     boolean isDisabled = admin.isTableDisabled(tableName);
-    System.out.println("Table is disabled: " + isDisabled);
+    System.out.println("HTableInterface is disabled: " + isDisabled);
 
     boolean avail1 = admin.isTableAvailable(tableName);
-    System.out.println("Table available: " + avail1);
+    System.out.println("HTableInterface available: " + avail1);
 
     // ^^ TableOperationsExample
     System.out.println("Deleting disabled table...");
@@ -62,14 +62,14 @@ public class TableOperationsExample {
     admin.deleteTable(tableName);
 
     boolean avail2 = admin.isTableAvailable(tableName);
-    System.out.println("Table available: " + avail2);
+    System.out.println("HTableInterface available: " + avail2);
 
     // ^^ TableOperationsExample
     System.out.println("Creating table again...");
     // vv TableOperationsExample
     admin.createTable(desc);
     boolean isEnabled = admin.isTableEnabled(tableName);
-    System.out.println("Table is enabled: " + isEnabled);
+    System.out.println("HTableInterface is enabled: " + isEnabled);
     // ^^ TableOperationsExample
   }
 }

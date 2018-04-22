@@ -8,8 +8,8 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import util.HBaseHelper;
@@ -24,7 +24,7 @@ public class CreateTableExample {
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");
     // vv CreateTableExample
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     Admin admin = connection.getAdmin(); // co CreateTableExample-1-CreateAdmin Create a administrative API instance.
 
     TableName tableName = TableName.valueOf("testtable");
@@ -37,7 +37,7 @@ public class CreateTableExample {
     admin.createTable(desc); // co CreateTableExample-4-CreateTable Call the createTable() method to do the actual work.
 
     boolean avail = admin.isTableAvailable(tableName); // co CreateTableExample-5-Check Check if the table is available.
-    System.out.println("Table available: " + avail);
+    System.out.println("HTableInterface available: " + avail);
     // ^^ CreateTableExample
   }
 }

@@ -7,13 +7,13 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.filter.BinaryPrefixComparator;
 import org.apache.hadoop.hbase.filter.ByteArrayComparable;
 import org.apache.hadoop.hbase.filter.CompareFilter;
@@ -26,7 +26,7 @@ import util.HBaseHelper;
 
 public class DependentColumnFilterExample {
 
-  private static Table table = null;
+  private static HTableInterface table = null;
 
   // vv DependentColumnFilterExample
   private static void filter(boolean drop,
@@ -84,7 +84,7 @@ public class DependentColumnFilterExample {
     System.out.println("Adding rows to table...");
     helper.fillTable("testtable", 1, 10, 10, true, "colfam1", "colfam2");
 
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     table = connection.getTable(TableName.valueOf("testtable"));
     // vv DependentColumnFilterExample
     filter(true, CompareFilter.CompareOp.NO_OP, null);

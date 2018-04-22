@@ -7,9 +7,9 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.coprocessor.Batch;
 import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -25,7 +25,7 @@ public class EndpointExample {
   public static void main(String[] args) throws IOException {
     Configuration conf = HBaseConfiguration.create();
     TableName tableName = TableName.valueOf("testtable");
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     // ^^ EndpointExample
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");
@@ -53,7 +53,7 @@ public class EndpointExample {
       } catch (InterruptedException e) {
       }
     //vv EndpointExample
-    Table table = connection.getTable(tableName);
+    HTableInterface table = connection.getTable(tableName);
     try {
       final RowCounterProtos.CountRequest request =
         RowCounterProtos.CountRequest.getDefaultInstance();

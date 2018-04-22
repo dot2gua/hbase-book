@@ -8,9 +8,9 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import util.HBaseHelper;
@@ -25,7 +25,7 @@ public class EndpointBatchExample {
   public static void main(String[] args) throws IOException {
     Configuration conf = HBaseConfiguration.create();
     TableName tableName = TableName.valueOf("testtable");
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     // ^^ EndpointBatchExample
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");
@@ -52,7 +52,7 @@ public class EndpointBatchExample {
         Thread.sleep(1000);
       } catch (InterruptedException e) {
       }
-    Table table = connection.getTable(tableName);
+    HTableInterface table = connection.getTable(tableName);
     try {
       //vv EndpointBatchExample
       final CountRequest request = CountRequest.getDefaultInstance();

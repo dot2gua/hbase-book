@@ -7,11 +7,11 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.protobuf.generated.HBaseProtos;
 import org.apache.hadoop.hbase.util.Bytes;
 
@@ -38,9 +38,9 @@ public class SnapshotExample {
     System.out.println("Before snapshot calls...");
     helper.dump("testtable", new String[]{"row1"}, null, null);
 
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     TableName tableName = TableName.valueOf("testtable");
-    Table table = connection.getTable(tableName);
+    HTableInterface table = connection.getTable(tableName);
     Admin admin = connection.getAdmin();
 
     /*
@@ -97,7 +97,7 @@ public class SnapshotExample {
     snaps = admin.listSnapshots();
     System.out.println("Snapshots after waiting: " + snaps);
 
-    System.out.println("Table before restoring snapshot 1");
+    System.out.println("HTableInterface before restoring snapshot 1");
     helper.dump("testtable", new String[]{"row1", "row2"}, null, null);
 
     // ^^ SnapshotExample
@@ -115,7 +115,7 @@ public class SnapshotExample {
     admin.restoreSnapshot("snapshot1"); // co SnapshotExample-5-Restore Restore the first snapshot, recreating the initial table. This needs to be done on a disabled table.
     admin.enableTable(tableName);
 
-    System.out.println("Table after restoring snapshot 1");
+    System.out.println("HTableInterface after restoring snapshot 1");
     helper.dump("testtable", new String[]{"row1", "row2"}, null, null);
 
     admin.deleteSnapshot("snapshot1"); // co SnapshotExample-6-DelSnap1 Remove the first snapshot, and list the available ones again.

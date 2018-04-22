@@ -8,12 +8,12 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.InclusiveStopFilter;
 import org.apache.hadoop.hbase.ipc.CoprocessorRpcChannel;
@@ -29,7 +29,7 @@ public class EndpointProxyExample {
   public static void main(String[] args) throws IOException {
     Configuration conf = HBaseConfiguration.create();
     TableName tableName = TableName.valueOf("testtable");
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");
     helper.createTable("testtable", 3, "colfam1", "colfam2");
@@ -46,7 +46,7 @@ public class EndpointProxyExample {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    Table table = connection.getTable(tableName);
+    HTableInterface table = connection.getTable(tableName);
     // wait for the split to be done
     while (admin.getTableRegions(tableName).size() < 2)
       try {

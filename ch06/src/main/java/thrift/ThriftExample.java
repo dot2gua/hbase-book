@@ -51,7 +51,7 @@ public class ThriftExample {
     cd.name = ByteBuffer.wrap(FAMILY2);
     columns.add(cd);
 
-    client.createTable(ByteBuffer.wrap(TABLE), columns); // co ThriftExample-3-Table Create the test table.
+    client.createTable(ByteBuffer.wrap(TABLE), columns); // co ThriftExample-3-HTableInterface Create the test table.
 
     ArrayList<Mutation> mutations = new ArrayList<Mutation>();
     mutations.add(new Mutation(false, ByteBuffer.wrap(COLUMN),

@@ -9,12 +9,12 @@ import org.apache.hadoop.hbase.CellScanner;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import util.HBaseHelper;
@@ -41,8 +41,8 @@ public class RenameTableExample {
   }
 
   // ^^ RenameTableExample
-  private static void printFirstValue(Table table) throws IOException {
-    System.out.println("Table: " + table.getName());
+  private static void printFirstValue(HTableInterface table) throws IOException {
+    System.out.println("HTableInterface: " + table.getName());
     Scan scan = new Scan();
     ResultScanner results = table.getScanner(scan);
     Result res = results.next();
@@ -67,17 +67,17 @@ public class RenameTableExample {
     System.out.println("Adding rows to table...");
     helper.fillTable("testtable", 1, 100, 100, "colfam1");
     // vv RenameTableExample
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     Admin admin = connection.getAdmin();
     TableName name = TableName.valueOf("testtable");
 
-    Table table = connection.getTable(name); // co RenameTableExample-07-Test1 Check the content of the original table. The helper method (see full source code) prints the first value of the first row.
+    HTableInterface table = connection.getTable(name); // co RenameTableExample-07-Test1 Check the content of the original table. The helper method (see full source code) prints the first value of the first row.
     printFirstValue(table);
 
     TableName rename = TableName.valueOf("newtesttable");
     renameTable(admin, name, rename); // co RenameTableExample-08-Rename Rename the table calling the above method.
 
-    Table newTable = connection.getTable(rename); // co RenameTableExample-09-Test2 Perform another check on the new table to see if we get the same first value of the first row back.
+    HTableInterface newTable = connection.getTable(rename); // co RenameTableExample-09-Test2 Perform another check on the new table to see if we get the same first value of the first row back.
     printFirstValue(newTable);
 
     table.close();

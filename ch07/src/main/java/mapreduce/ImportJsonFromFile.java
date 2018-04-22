@@ -93,7 +93,7 @@ public class ImportJsonFromFile {
         String link = (String) json.get("link");
         byte[] md5Url = DigestUtils.md5(link);
         Put put = new Put(md5Url);
-        put.addColumn(Bytes.toBytes("data"), Bytes.toBytes("link"),
+        put.add(Bytes.toBytes("data"), Bytes.toBytes("link"),
           Bytes.toBytes(link));
         context.write(new ImmutableBytesWritable(md5Url), put);
       } catch (Exception e) {

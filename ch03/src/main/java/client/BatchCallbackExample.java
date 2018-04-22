@@ -8,14 +8,14 @@ import java.util.List;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Row;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.coprocessor.Batch;
 import org.apache.hadoop.hbase.util.Bytes;
 
@@ -45,14 +45,14 @@ public class BatchCallbackExample {
     System.out.println("Before batch call...");
     helper.dump("testtable", new String[] { "row1", "row2" }, null, null);
 
-    Connection connection = ConnectionFactory.createConnection(conf);
-    Table table = connection.getTable(TableName.valueOf("testtable"));
+    HConnection connection = HConnectionManager.createConnection(conf);
+    HTableInterface table = connection.getTable(TableName.valueOf("testtable"));
 
     // vv BatchCallbackExample
     List<Row> batch = new ArrayList<Row>(); // co BatchCallbackExample-1-CreateList Create a list to hold all values.
 
     Put put = new Put(ROW2);
-    put.addColumn(COLFAM2, QUAL1, 4, Bytes.toBytes("val5")); // co BatchCallbackExample-2-AddPut Add a Put instance.
+    put.add(COLFAM2, QUAL1, 4, Bytes.toBytes("val5")); // co BatchCallbackExample-2-AddPut Add a Put instance.
     batch.add(put);
 
     Get get1 = new Get(ROW1);
@@ -60,7 +60,7 @@ public class BatchCallbackExample {
     batch.add(get1);
 
     Delete delete = new Delete(ROW1);
-    delete.addColumns(COLFAM1, QUAL2); // co BatchCallbackExample-4-AddDelete Add a Delete instance.
+    delete.deleteColumns(COLFAM1, QUAL2); // co BatchCallbackExample-4-AddDelete Add a Delete instance.
     batch.add(delete);
 
     Get get2 = new Get(ROW2);

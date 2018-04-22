@@ -6,12 +6,12 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.RowMutations;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 //import org.apache.hadoop.hbase.filter.BinaryComparator;
 import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -35,17 +35,17 @@ public class CheckAndMutateExample {
     System.out.println("Before check and mutate calls...");
     helper.dump("testtable", new String[]{ "row1" }, null, null);
 
-    Connection connection = ConnectionFactory.createConnection(conf);
-    Table table = connection.getTable(TableName.valueOf("testtable"));
+    HConnection connection = HConnectionManager.createConnection(conf);
+    HTableInterface table = connection.getTable(TableName.valueOf("testtable"));
 
     //BinaryComparator bc = new BinaryComparator(Bytes.toBytes("val1"));
     //System.out.println(bc.compareTo(Bytes.toBytes("val2")));
 
     // vv CheckAndMutateExample
     Put put = new Put(Bytes.toBytes("row1"));
-    put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
+    put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
       4, Bytes.toBytes("val99"));
-    put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual4"),
+    put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual4"),
       4, Bytes.toBytes("val100"));
 
     Delete delete = new Delete(Bytes.toBytes("row1"));

@@ -6,12 +6,12 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.PageFilter;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -33,8 +33,8 @@ public class PageFilterExample {
     System.out.println("Adding rows to table...");
     helper.fillTable("testtable", 1, 1000, 10, "colfam1");
 
-    Connection connection = ConnectionFactory.createConnection(conf);
-    Table table = connection.getTable(TableName.valueOf("testtable"));
+    HConnection connection = HConnectionManager.createConnection(conf);
+    HTableInterface table = connection.getTable(TableName.valueOf("testtable"));
 
     // vv PageFilterExample
     Filter filter = new PageFilter(15);

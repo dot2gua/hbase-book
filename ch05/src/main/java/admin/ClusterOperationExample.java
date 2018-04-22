@@ -13,8 +13,8 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.BufferedMutator;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.RegionLocator;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -46,7 +46,7 @@ public class ClusterOperationExample {
     helper.dropTable("testtable");
 
     // vv ClusterOperationExample
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     Admin admin = connection.getAdmin();
 
     TableName tableName = TableName.valueOf("testtable");
@@ -67,7 +67,7 @@ public class ClusterOperationExample {
           String row = Character.toString((char) a) +
             Character.toString((char) b) + Character.toString((char) c); // co ClusterOperationExample-02-Put Insert many rows starting from "AAA" to "ZZZ". These will be spread across the regions.
           Put put = new Put(Bytes.toBytes(row));
-          put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("col1"),
+          put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("col1"),
             Bytes.toBytes("val1"));
           System.out.println("Adding row: " + row);
           mutator.mutate(put);

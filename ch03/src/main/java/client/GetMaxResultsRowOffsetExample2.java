@@ -5,12 +5,12 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.CellScanner;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import util.HBaseHelper;
@@ -24,15 +24,15 @@ public class GetMaxResultsRowOffsetExample2 {
     helper.dropTable("testtable");
     helper.createTable("testtable", 3, "colfam1");
 
-    Connection connection = ConnectionFactory.createConnection(conf);
-    Table table = connection.getTable(TableName.valueOf("testtable"));
+    HConnection connection = HConnectionManager.createConnection(conf);
+    HTableInterface table = connection.getTable(TableName.valueOf("testtable"));
 
     // vv GetMaxResultsRowOffsetExample2
     for (int version = 1; version <= 3; version++) { // co GetMaxResultsRowOffsetExample2-1-Loop Insert three versions of each column.
       Put put = new Put(Bytes.toBytes("row1"));
       for (int n = 1; n <= 1000; n++) {
         String num = String.format("%04d", n);
-        put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual" + num),
+        put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual" + num),
           Bytes.toBytes("val" + num));
       }
       System.out.println("Writing version: " + version);

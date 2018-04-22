@@ -82,7 +82,7 @@ public class ImportFromFile2 {
         String lineString = line.toString();
         byte[] rowkey = DigestUtils.md5(lineString);
         Put put = new Put(rowkey);
-        put.addColumn(family, qualifier, Bytes.toBytes(lineString));
+        put.add(family, qualifier, Bytes.toBytes(lineString));
         context.write(new ImmutableBytesWritable(rowkey), put);
         context.getCounter(Counters.LINES).increment(1);
       } catch (Exception e) {

@@ -15,14 +15,14 @@ import org.apache.hadoop.hbase.trace.HBaseHTraceConfiguration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.trace.SpanReceiverHost;
 import org.apache.hadoop.hbase.util.Bytes;
 
@@ -53,10 +53,10 @@ public class HTraceExample {
     spanReceiverHost = SpanReceiverHost.getInstance(conf); // co HTraceExample-2-GetInstance Initialize the span receiver host from the configuration settings.
     // ^^ HTraceExample
 
-    Connection connection = null;
-    TraceScope ts0 = Trace.startSpan("Connection Trace", Sampler.ALWAYS);
+    HConnection connection = null;
+    TraceScope ts0 = Trace.startSpan("HConnection Trace", Sampler.ALWAYS);
     try {
-      connection = ConnectionFactory.createConnection(conf);
+      connection = HConnectionManager.createConnection(conf);
     } finally {
       ts0.close();
     }
@@ -66,7 +66,7 @@ public class HTraceExample {
     Thread.sleep(3000);
 
     // vv HTraceExample
-    Table table = connection.getTable(TableName.valueOf("testtable"));
+    HTableInterface table = connection.getTable(TableName.valueOf("testtable"));
 
     TraceScope ts1 = Trace.startSpan("Get Trace", Sampler.ALWAYS); // co HTraceExample-2-Start Start a span, giving it a name and sample rate.
     try {

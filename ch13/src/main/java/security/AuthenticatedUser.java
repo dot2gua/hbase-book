@@ -13,14 +13,14 @@ import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.security.access.AccessControlClient;
 import org.apache.hadoop.hbase.security.access.Permission;
 import org.apache.hadoop.hbase.security.access.UserPermission;
@@ -32,7 +32,7 @@ public class AuthenticatedUser implements AutoCloseable { // co AuthenticatedUse
 
   private UserGroupInformation ugi;
   private Configuration conf;
-  private Connection connection;
+  private HConnection connection;
   private String name;
 
   public AuthenticatedUser(String user, String path, String name)
@@ -53,13 +53,13 @@ public class AuthenticatedUser implements AutoCloseable { // co AuthenticatedUse
       @Override
       public Void run() throws Exception {
         conf = HBaseConfiguration.create();
-        connection = ConnectionFactory.createConnection(conf); // co AuthenticatedUser-03-CreateConn Create the connection in the context of the authorized user.
+        connection = HConnectionManager.createConnection(conf); // co AuthenticatedUser-03-CreateConn Create the connection in the context of the authorized user.
         return null;
       }
     });
   }
 
-  public Connection getConnection() {
+  public HConnection getConnection() {
     return connection;
   }
   /*...*/
@@ -142,7 +142,7 @@ public class AuthenticatedUser implements AutoCloseable { // co AuthenticatedUse
     doAs(new PrivilegedExceptionAction<Void>() {
       @Override
       public Void run() throws Exception {
-        Table table = connection.getTable(tableName);
+        HTableInterface table = connection.getTable(tableName);
         ResultScanner scanner = table.getScanner(scan);
         Map<String, Permission> perms = new HashMap<>();
         perms.put(user, new Permission(action));
@@ -297,7 +297,7 @@ public class AuthenticatedUser implements AutoCloseable { // co AuthenticatedUse
       @Override
       public Void run() {
         try {
-          Table table = connection.getTable(tableName);
+          HTableInterface table = connection.getTable(tableName);
           ResultScanner resultScanner = table.getScanner(scan);
           System.out.println(name + ": Starting scan...");
           int rows = 0;
@@ -328,7 +328,7 @@ public class AuthenticatedUser implements AutoCloseable { // co AuthenticatedUse
     doAs(new PrivilegedExceptionAction<Void>() {
       @Override
       public Void run() throws Exception {
-        Table table = connection.getTable(tableName);
+        HTableInterface table = connection.getTable(tableName);
         try {
           table.put(put);
           System.out.println(name + ": Put data into " + tableName);
@@ -347,7 +347,7 @@ public class AuthenticatedUser implements AutoCloseable { // co AuthenticatedUse
     return doAs(new PrivilegedExceptionAction<Result>() {
       @Override
       public Result run() throws Exception {
-        Table table = connection.getTable(tableName);
+        HTableInterface table = connection.getTable(tableName);
         try {
           Result result = table.get(get);
           System.out.println(name + ": Get result:");

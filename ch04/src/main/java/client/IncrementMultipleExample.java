@@ -9,11 +9,11 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Increment;
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import util.HBaseHelper;
@@ -27,8 +27,8 @@ public class IncrementMultipleExample {
     helper.dropTable("testtable");
     helper.createTable("testtable", "daily", "weekly");
 
-    Connection connection = ConnectionFactory.createConnection(conf);
-    Table table = connection.getTable(TableName.valueOf("testtable"));
+    HConnection connection = HConnectionManager.createConnection(conf);
+    HTableInterface table = connection.getTable(TableName.valueOf("testtable"));
     // vv IncrementMultipleExample
     Increment increment1 = new Increment(Bytes.toBytes("20150101"));
 

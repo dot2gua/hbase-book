@@ -17,8 +17,8 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.BufferedMutator;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Scan;
@@ -51,7 +51,7 @@ public class ParseJsonMulti {
   static class ParseMapper
   extends TableMapper<ImmutableBytesWritable, Writable> {
 
-    private Connection connection = null;
+    private HConnection connection = null;
     private BufferedMutator infoTable = null;
     private BufferedMutator linkTable = null;
     private JSONParser parser = new JSONParser();
@@ -60,7 +60,7 @@ public class ParseJsonMulti {
     @Override
     protected void setup(Context context)
     throws IOException, InterruptedException {
-      connection = ConnectionFactory.createConnection(
+      connection = HConnectionManager.createConnection(
         context.getConfiguration());
       infoTable = connection.getBufferedMutator(TableName.valueOf(
         context.getConfiguration().get("conf.infotable"))); // co ParseJsonMulti-1-Setup Create and configure both target tables in the setup() method.

@@ -10,7 +10,7 @@ import org.apache.hadoop.conf.Configuration;
 
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.security.SecurityCapability;
@@ -183,7 +183,7 @@ public class VisibilityLabelExample {
     superuser.doAs(new PrivilegedExceptionAction<Void>() {
       @Override
       public Void run() throws Exception {
-        Connection connection = superuser.getConnection();
+        HConnection connection = superuser.getConnection();
         Admin admin = connection.getAdmin();
 
         List<SecurityCapability> sc = admin.getSecurityCapabilities();
@@ -252,7 +252,7 @@ public class VisibilityLabelExample {
       "\" visibility...");
     // vv VisibilityLabelExample
     Put put = new Put(Bytes.toBytes("row-98"));
-    put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("col-medium-high"),
+    put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("col-medium-high"),
       Bytes.toBytes("medium and high visibility"));
     put.setCellVisibility(new CellVisibility("medium & high")); // co VisibilityLabelExample-07-AddCell Add new cells with specific cell visibility expressions set.
     superuser.put(tableName, put);
@@ -261,7 +261,7 @@ public class VisibilityLabelExample {
     System.out.println("Admin: Add a cell with \"low OR medium\" visibility...");
     // vv VisibilityLabelExample
     put = new Put(Bytes.toBytes("row-99"));
-    put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("col-low-medium"),
+    put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("col-low-medium"),
       Bytes.toBytes("low or medium visibility"));
     put.setCellVisibility(new CellVisibility("low | medium"));
     admin.put(tableName, put);

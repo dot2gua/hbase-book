@@ -6,11 +6,11 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import util.HBaseHelper;
@@ -29,16 +29,16 @@ public class DeleteTimestampExample {
     helper.dropTable("testtable");
     helper.createTable("testtable", 3, "colfam1");
 
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
 
     TableName tableName = TableName.valueOf("testtable");
-    Table table = connection.getTable(tableName);
+    HTableInterface table = connection.getTable(tableName);
     Admin admin = connection.getAdmin();
 
     // vv DeleteTimestampExample
     for (int count = 1; count <= 6; count++) { // co DeleteTimestampExample-1-Put Store the same column six times.
       Put put = new Put(ROW1);
-      put.addColumn(COLFAM1, QUAL1, count, Bytes.toBytes("val-" + count)); // co DeleteTimestampExample-2-Add The version is set to a specific value, using the loop variable.
+      put.add(COLFAM1, QUAL1, count, Bytes.toBytes("val-" + count)); // co DeleteTimestampExample-2-Add The version is set to a specific value, using the loop variable.
       table.put(put);
     }
     // ^^ DeleteTimestampExample

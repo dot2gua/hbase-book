@@ -17,8 +17,8 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.NamespaceDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Durability;
 import org.apache.hadoop.hbase.io.compress.Compression;
 import org.apache.hadoop.hbase.regionserver.BloomType;
@@ -72,7 +72,7 @@ public class SchemaManager {
   private static final String KEY_ENCRYPTION_KEY = "encryption_key";
 
   private Configuration conf = null;
-  private Connection connection = null;
+  private HConnection connection = null;
   private Admin admin = null;
   private XMLConfiguration config = null;
   private ArrayList<NamespaceDescriptor> namespaces = null;
@@ -240,7 +240,7 @@ public class SchemaManager {
    * @throws IOException When creating a connection to HBase fails.
    */
   public void process() throws IOException {
-    connection = ConnectionFactory.createConnection(conf);
+    connection = HConnectionManager.createConnection(conf);
     admin = connection.getAdmin();
     for (final NamespaceDescriptor descriptor : namespaces) {
       createOrChangeNamespace(descriptor);
@@ -316,16 +316,16 @@ public class SchemaManager {
         }
         LOG.info("Enabling table...");
         admin.enableTable(schema.getTableName());
-        LOG.info("Table enabled");
+        LOG.info("HTableInterface enabled");
         getTable(schema.getTableName(), false);
-        LOG.info("Table changed");
+        LOG.info("HTableInterface changed");
       } else {
         LOG.info("No changes detected!");
       }
     } else {
       LOG.info("Creating table " + schema.getNameAsString() + "...");
       admin.createTable(schema); // co HushSchemaManager-7-CreateTable In case the table did not exist yet create it now.
-      LOG.info("Table created");
+      LOG.info("HTableInterface created");
     }
   }
   // ^^ HushSchemaManager

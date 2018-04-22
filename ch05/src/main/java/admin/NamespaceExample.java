@@ -7,8 +7,8 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.NamespaceDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 
 // cc NamespaceExample Example using the administrative API to create etc. a namespace
 public class NamespaceExample {
@@ -16,7 +16,7 @@ public class NamespaceExample {
   public static void main(String[] args) throws IOException, InterruptedException {
     // vv NamespaceExample
     Configuration conf = HBaseConfiguration.create();
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     Admin admin = connection.getAdmin();
     // ^^ NamespaceExample
     try {

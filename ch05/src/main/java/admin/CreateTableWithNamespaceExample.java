@@ -9,8 +9,8 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.NamespaceDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import util.HBaseHelper;
@@ -22,7 +22,7 @@ public class CreateTableWithNamespaceExample {
     Configuration conf = HBaseConfiguration.create();
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     Admin admin = connection.getAdmin();
 
     // vv CreateTableWithNamespaceExample
@@ -41,6 +41,6 @@ public class CreateTableWithNamespaceExample {
     // ^^ CreateTableWithNamespaceExample
 
     boolean avail = admin.isTableAvailable(tableName);
-    System.out.println("Table available: " + avail);
+    System.out.println("HTableInterface available: " + avail);
   }
 }

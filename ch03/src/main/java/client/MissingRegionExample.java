@@ -6,11 +6,11 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HRegionLocation;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.RegionLocator;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.util.Pair;
 import util.HBaseHelper;
@@ -19,12 +19,12 @@ import java.io.IOException;
 
 public class MissingRegionExample {
 
-  private static Connection connection = null;
+  private static HConnection connection = null;
   private static TableName tableName = null;
 
   private static void printTableRegions() throws IOException {
     System.out.println("Printing regions of table: " + tableName);
-    Table table = connection.getTable(tableName);
+    HTableInterface table = connection.getTable(tableName);
     RegionLocator locator = connection.getRegionLocator(tableName);
     Pair<byte[][], byte[][]> pair = locator.getStartEndKeys();
     for (int n = 0; n < pair.getFirst().length; n++) {
@@ -44,7 +44,7 @@ public class MissingRegionExample {
       public void run() {
         try {
           while (true) {
-            Table table = connection.getTable(tableName);
+            HTableInterface table = connection.getTable(tableName);
             Get get = new Get(Bytes.toBytes("row-050"));
             long time = System.currentTimeMillis();
             table.get(get);
@@ -70,8 +70,8 @@ public class MissingRegionExample {
   public static void main(String[] args) throws IOException {
     Configuration conf = HBaseConfiguration.create();
     tableName = TableName.valueOf("testtable");
-    connection = ConnectionFactory.createConnection(conf);
-    Table table = connection.getTable(tableName);
+    connection = HConnectionManager.createConnection(conf);
+    HTableInterface table = connection.getTable(tableName);
 
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");

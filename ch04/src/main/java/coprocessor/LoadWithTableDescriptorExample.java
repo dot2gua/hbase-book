@@ -9,8 +9,8 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 
 import util.HBaseHelper;
 
@@ -20,7 +20,7 @@ public class LoadWithTableDescriptorExample {
 
   public static void main(String[] args) throws IOException {
     Configuration conf = HBaseConfiguration.create();
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     // ^^ LoadWithTableDescriptorExample
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");

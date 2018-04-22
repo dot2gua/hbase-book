@@ -90,7 +90,7 @@ public class ImportFromFile {
         String lineString = line.toString();
         byte[] rowkey = DigestUtils.md5(lineString); // co ImportFromFile-4-RowKey The row key is the MD5 hash of the line to generate a random key.
         Put put = new Put(rowkey);
-        put.addColumn(family, qualifier, Bytes.toBytes(lineString)); // co ImportFromFile-5-Put Store the original data in a column in the given table.
+        put.add(family, qualifier, Bytes.toBytes(lineString)); // co ImportFromFile-5-Put Store the original data in a column in the given table.
         context.write(new ImmutableBytesWritable(rowkey), put);
         context.getCounter(Counters.LINES).increment(1);
       } catch (Exception e) {

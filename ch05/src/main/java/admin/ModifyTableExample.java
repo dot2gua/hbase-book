@@ -8,8 +8,8 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.util.Pair;
 
@@ -24,14 +24,14 @@ public class ModifyTableExample {
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");
 
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     // vv ModifyTableExample
     Admin admin = connection.getAdmin();
     TableName tableName = TableName.valueOf("testtable");
     HColumnDescriptor coldef1 = new HColumnDescriptor("colfam1");
     HTableDescriptor desc = new HTableDescriptor(tableName)
       .addFamily(coldef1)
-      .setValue("Description", "Chapter 5 - ModifyTableExample: Original Table");
+      .setValue("Description", "Chapter 5 - ModifyTableExample: Original HTableInterface");
 
     admin.createTable(desc, Bytes.toBytes(1L), Bytes.toBytes(10000L), 50); // co ModifyTableExample-1-CreateTable Create the table with the original structure and 50 regions.
 
@@ -41,7 +41,7 @@ public class ModifyTableExample {
       .addFamily(coldef2)
       .setMaxFileSize(1024 * 1024 * 1024L)
       .setValue("Description",
-        "Chapter 5 - ModifyTableExample: Modified Table");
+        "Chapter 5 - ModifyTableExample: Modified HTableInterface");
 
     admin.disableTable(tableName);
     admin.modifyTable(tableName, htd1); // co ModifyTableExample-3-ChangeTable Disable and modify the table.

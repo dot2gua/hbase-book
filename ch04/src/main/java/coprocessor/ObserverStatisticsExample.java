@@ -12,8 +12,8 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Append;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Increment;
@@ -23,7 +23,7 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Row;
 import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.coprocessor.Batch;
 import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
@@ -36,7 +36,7 @@ import static coprocessor.generated.ObserverStatisticsProtos.*;
 public class ObserverStatisticsExample {
 
   // vv ObserverStatisticsExample
-  private static Table table = null;
+  private static HTableInterface table = null;
 
   private static void printStatistics(boolean print, boolean clear)
   throws Throwable {
@@ -75,7 +75,7 @@ public class ObserverStatisticsExample {
 
   public static void main(String[] args) throws IOException {
     Configuration conf = HBaseConfiguration.create();
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     // vv ObserverStatisticsExample
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");
@@ -98,7 +98,7 @@ public class ObserverStatisticsExample {
 
       System.out.println("Apply single put...");
       Put put = new Put(Bytes.toBytes("row10"));
-      put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual10"),
+      put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual10"),
         Bytes.toBytes("val10"));
       table.put(put);
       printStatistics(true, true);
@@ -150,7 +150,7 @@ public class ObserverStatisticsExample {
       System.out.println("Apply single put with mutateRow()...");
       RowMutations mutations = new RowMutations(Bytes.toBytes("row1"));
       put = new Put(Bytes.toBytes("row1"));
-      put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual10"),
+      put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual10"),
         Bytes.toBytes("val10"));
       mutations.add(put);
       table.mutateRow(mutations);
@@ -197,7 +197,7 @@ public class ObserverStatisticsExample {
 
       System.out.println("Apply checkAndPut (failing)...");
       put = new Put(Bytes.toBytes("row10"));
-      put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual17"),
+      put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual17"),
         Bytes.toBytes("val17"));
       boolean cap = table.checkAndPut(Bytes.toBytes("row10"),
         Bytes.toBytes("colfam1"), Bytes.toBytes("qual15"), null, put);
@@ -227,7 +227,7 @@ public class ObserverStatisticsExample {
       System.out.println("Apply checkAndMutate (failing)...");
       mutations = new RowMutations(Bytes.toBytes("row10"));
       put = new Put(Bytes.toBytes("row10"));
-      put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual20"),
+      put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual20"),
         Bytes.toBytes("val20"));
       delete = new Delete(Bytes.toBytes("row10"));
       delete.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual17"));

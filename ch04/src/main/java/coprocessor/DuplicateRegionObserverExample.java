@@ -16,12 +16,12 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.coprocessor.BaseRegionObserver;
 import org.apache.hadoop.hbase.coprocessor.ObserverContext;
 import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
@@ -49,7 +49,7 @@ public class DuplicateRegionObserverExample extends BaseRegionObserver {
   public void postGetOp(ObserverContext<RegionCoprocessorEnvironment> e,
     Get get, List<Cell> results) throws IOException {
     Put put = new Put(get.getRow());
-    put.addColumn(get.getRow(), FIXED_COLUMN, Bytes.toBytes(counter.get()));
+    put.add(get.getRow(), FIXED_COLUMN, Bytes.toBytes(counter.get()));
     CellScanner scanner = put.cellScanner();
     scanner.advance();
     Cell cell = scanner.current();
@@ -64,7 +64,7 @@ public class DuplicateRegionObserverExample extends BaseRegionObserver {
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");
 
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     TableName tableName = TableName.valueOf("testtable");
 
     HTableDescriptor htd = new HTableDescriptor(tableName);
@@ -93,7 +93,7 @@ public class DuplicateRegionObserverExample extends BaseRegionObserver {
     System.out.println("Adding rows to table...");
     helper.fillTable("testtable", 1, 10, 10, "colfam1");
 
-    Table table = connection.getTable(tableName);
+    HTableInterface table = connection.getTable(tableName);
     Get get = new Get(Bytes.toBytes("row-1"));
     Result result = table.get(get);
 
@@ -118,7 +118,7 @@ Version 1.1.1, rd0a115a7267f54e01c72c603ec53e91ec418292f, Tue Jun 23 14:44:07 PD
 hbase(main):001:0> create 'testtable', 'colfam1'
 0 row(s) in 2.1750 seconds
 
-=> Hbase::Table - testtable
+=> Hbase::HTableInterface - testtable
 hbase(main):002:0> alter 'testtable', 'coprocessor' => 'file:///opt/hbase-book/hbase-book-ch04-2.0.jar|coprocessor.DuplicateRegionObserverExample|'
 Updating all regions with the new schema...
 0/1 regions updated.
@@ -127,7 +127,7 @@ Done.
 0 row(s) in 3.9970 seconds
 
 hbase(main):003:0> describe 'testtable'
-Table testtable is ENABLED
+HTableInterface testtable is ENABLED
 testtable, {TABLE_ATTRIBUTES => {coprocessor$1 => 'file:///opt/hbase-book/hbase-book-ch04-2.0.jar|coprocessor.DuplicateRegionObserverExample|'}
 COLUMN FAMILIES DESCRIPTION
 {NAME => 'colfam1', DATA_BLOCK_ENCODING => 'NONE', BLOOMFILTER => 'ROW', REPLICATION_SCOPE => '0', VERSIONS => '1', COMPRESSION => 'NONE', MIN_VERSIONS => '0', TTL => 'FOREVER', KEEP_DELETED_CELLS => 'FALSE', BLOC
@@ -141,7 +141,7 @@ Done.
 0 row(s) in 2.1740 seconds
 
 hbase(main):005:0> describe 'testtable'
-Table testtable is ENABLED
+HTableInterface testtable is ENABLED
 testtable, {TABLE_ATTRIBUTES => {coprocessor$1 => 'file:///opt/hbase-book/hbase-book-ch04-2.0.jar|coprocessor.DuplicateRegionObserverExample|', coprocessor$2 => 'file:///opt/hbase-book/hbase-book-ch04-2.0.jar|copr
 ocessor.DuplicateRegionObserverExample|'}
 COLUMN FAMILIES DESCRIPTION

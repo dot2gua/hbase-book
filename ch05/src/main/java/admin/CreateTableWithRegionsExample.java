@@ -8,8 +8,8 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.RegionLocator;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.util.Pair;
@@ -21,7 +21,7 @@ public class CreateTableWithRegionsExample {
 
   // vv CreateTableWithRegionsExample
   private static Configuration conf = null;
-  private static Connection connection = null;
+  private static HConnection connection = null;
 
   private static void printTableRegions(String tableName) throws IOException { // co CreateTableWithRegionsExample-1-PrintTable Helper method to print the regions of a table.
     System.out.println("Printing regions of table: " + tableName);
@@ -44,7 +44,7 @@ public class CreateTableWithRegionsExample {
   // vv CreateTableWithRegionsExample
   public static void main(String[] args) throws IOException, InterruptedException {
     conf = HBaseConfiguration.create();
-    connection = ConnectionFactory.createConnection(conf);
+    connection = HConnectionManager.createConnection(conf);
     // ^^ CreateTableWithRegionsExample
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable1");

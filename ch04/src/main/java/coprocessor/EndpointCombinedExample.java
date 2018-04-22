@@ -8,10 +8,10 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.RegionLocator;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.coprocessor.Batch;
 import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -37,7 +37,7 @@ public class EndpointCombinedExample {
     helper.dump("testtable",
       new String[]{"row1", "row2", "row3", "row4", "row5"},
       null, null);
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     Admin admin = connection.getAdmin();
     try {
       admin.split(TableName.valueOf("testtable"), Bytes.toBytes("row3"));
@@ -45,7 +45,7 @@ public class EndpointCombinedExample {
       e.printStackTrace();
     }
     TableName name = TableName.valueOf("testtable");
-    Table table = connection.getTable(name);
+    HTableInterface table = connection.getTable(name);
     // wait for the split to be done
     RegionLocator locator = connection.getRegionLocator(name);
     while (locator.getAllRegionLocations().size() < 2)

@@ -8,13 +8,13 @@ import java.util.List;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Row;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import util.HBaseHelper;
@@ -35,14 +35,14 @@ public class BatchSameRowExample {
     System.out.println("Before batch call...");
     helper.dump("testtable", new String[] { "row1" }, null, null);
 
-    Connection connection = ConnectionFactory.createConnection(conf);
-    Table table = connection.getTable(TableName.valueOf("testtable"));
+    HConnection connection = HConnectionManager.createConnection(conf);
+    HTableInterface table = connection.getTable(TableName.valueOf("testtable"));
 
     // vv BatchSameRowExample
     List<Row> batch = new ArrayList<Row>();
 
     Put put = new Put(ROW1);
-    put.addColumn(COLFAM1, QUAL1, 2L, Bytes.toBytes("val2"));
+    put.add(COLFAM1, QUAL1, 2L, Bytes.toBytes("val2"));
     batch.add(put);
 
     Get get1 = new Get(ROW1);
@@ -50,7 +50,7 @@ public class BatchSameRowExample {
     batch.add(get1);
 
     Delete delete = new Delete(ROW1);
-    delete.addColumns(COLFAM1, QUAL1, 3L); // co BatchSameRowExample-1-AddDelete Delete the row that was just put above.
+    delete.deleteColumns(COLFAM1, QUAL1, 3L); // co BatchSameRowExample-1-AddDelete Delete the row that was just put above.
     batch.add(delete);
 
     Get get2 = new Get(ROW1);

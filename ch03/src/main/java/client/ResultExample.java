@@ -6,12 +6,12 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import util.HBaseHelper;
@@ -24,13 +24,13 @@ public class ResultExample {
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");
     helper.createTable("testtable", "colfam1");
-    Connection connection = ConnectionFactory.createConnection(conf);
-    Table table = connection.getTable(TableName.valueOf("testtable"));
+    HConnection connection = HConnectionManager.createConnection(conf);
+    HTableInterface table = connection.getTable(TableName.valueOf("testtable"));
 
     Put put = new Put(Bytes.toBytes("row1"));
-    put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
+    put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
       Bytes.toBytes("val1"));
-    put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual2"),
+    put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual2"),
       Bytes.toBytes("val2"));
     table.put(put);
 

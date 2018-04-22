@@ -7,12 +7,12 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.BufferedMutator;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import util.HBaseHelper;
@@ -27,8 +27,8 @@ public class PutWriteBufferExample1 {
     helper.createTable("testtable", "colfam1");
     // vv PutWriteBufferExample1
     TableName name = TableName.valueOf("testtable");
-    Connection connection = ConnectionFactory.createConnection(conf);
-    Table table = connection.getTable(name);
+    HConnection connection = HConnectionManager.createConnection(conf);
+    HTableInterface table = connection.getTable(name);
     BufferedMutator mutator = connection.getBufferedMutator(name); // co PutWriteBufferExample1-1-CheckFlush Get a mutator instance for the table.
 
     Put put1 = new Put(Bytes.toBytes("row1"));
@@ -37,12 +37,12 @@ public class PutWriteBufferExample1 {
     mutator.mutate(put1); // co PutWriteBufferExample1-2-DoPut Store some rows with columns into HBase.
 
     Put put2 = new Put(Bytes.toBytes("row2"));
-    put2.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
+    put2.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
       Bytes.toBytes("val2"));
     mutator.mutate(put2);
 
     Put put3 = new Put(Bytes.toBytes("row3"));
-    put3.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
+    put3.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
       Bytes.toBytes("val3"));
     mutator.mutate(put3);
 

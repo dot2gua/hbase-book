@@ -9,12 +9,12 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.filter.Filter;
 
 import org.apache.hadoop.hbase.filter.FirstKeyValueMatchingQualifiersFilter;
@@ -33,8 +33,8 @@ public class FirstKeyValueMatchingQualifiersFilterExample {
     helper.fillTableRandom("testtable", /* row */ 1, 50, 0,
        /* col */ 1, 10, 0,  /* val */ 0, 100, 0, true, "colfam1");
 
-    Connection connection = ConnectionFactory.createConnection(conf);
-    Table table = connection.getTable(TableName.valueOf("testtable"));
+    HConnection connection = HConnectionManager.createConnection(conf);
+    HTableInterface table = connection.getTable(TableName.valueOf("testtable"));
     // vv FirstKeyValueMatchingQualifiersFilterExample
     Set<byte[]> quals = new HashSet<byte[]>();
     quals.add(Bytes.toBytes("col-2"));

@@ -7,12 +7,12 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.KeyOnlyFilter;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -20,7 +20,7 @@ import util.HBaseHelper;
 
 public class KeyOnlyFilterExample {
 
-  private static Table table;
+  private static HTableInterface table;
 
   private static void scan(Filter filter) throws IOException {
     Scan scan = new Scan();
@@ -53,7 +53,7 @@ public class KeyOnlyFilterExample {
     helper.fillTableRandom("testtable", /* row */ 1, 5, 0,
        /* col */ 1, 30, 0,  /* val */ 0, 10000, 0, true, "colfam1");
 
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     table = connection.getTable(TableName.valueOf("testtable"));
     System.out.println("Scan #1");
     // vv KeyOnlyFilterExample

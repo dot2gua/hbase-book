@@ -12,9 +12,9 @@ import org.apache.hadoop.conf.Configuration;
 import com.maxmind.geoip.Country;
 import com.maxmind.geoip.LookupService;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
+import org.apache.hadoop.hbase.client.HTableInterface;
 
 /**
  * This class is implemented as a Singleton, i.e., it is shared across the
@@ -34,7 +34,7 @@ public class ResourceManager {
 
   private static ResourceManager INSTANCE;
   private final Configuration conf;
-  private final Connection connection;
+  private final HConnection connection;
   private final Counters counters;
   private final DomainManager domainManager;
   private final UserManager userManager;
@@ -88,7 +88,7 @@ public class ResourceManager {
   // vv HushHTablePoolProvider
   private ResourceManager(Configuration conf) throws IOException {
     this.conf = conf;
-    this.connection = ConnectionFactory.createConnection(conf);
+    this.connection = HConnectionManager.createConnection(conf);
     /* ... */
     // ^^ HushHTablePoolProvider
     this.counters = new Counters(this);
@@ -128,7 +128,7 @@ public class ResourceManager {
    * @throws IOException When talking to HBase fails.
    */
   // vv HushHTablePoolProvider
-  public Table getTable(TableName tableName) throws IOException {
+  public HTableInterface getTable(TableName tableName) throws IOException {
     return connection.getTable(tableName);
   }
 
@@ -141,7 +141,7 @@ public class ResourceManager {
    * @param table The table reference to return to the pool.
    */
   // vv HushHTablePoolProvider
-  public void putTable(Table table) throws IOException {
+  public void putTable(HTableInterface table) throws IOException {
     if (table != null) {
       table.close();
     }
@@ -156,7 +156,7 @@ public class ResourceManager {
    * @param table The table reference to return to the pool.
    */
   // vv HushHTablePoolProvider
-  public void putTable(Table table, boolean quiet) throws IOException {
+  public void putTable(HTableInterface table, boolean quiet) throws IOException {
     if (table != null) {
       try {
         table.close();

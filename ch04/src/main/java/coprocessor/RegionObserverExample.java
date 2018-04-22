@@ -32,7 +32,7 @@ public class RegionObserverExample extends BaseRegionObserver {
     // vv RegionObserverExample
     if (Bytes.equals(get.getRow(), FIXED_ROW)) { // co RegionObserverExample-1-Check Check if the request row key matches a well known one.
       Put put = new Put(get.getRow());
-      put.addColumn(FIXED_ROW, FIXED_ROW, // co RegionObserverExample-2-Cell Create cell indirectly using a Put instance.
+      put.add(FIXED_ROW, FIXED_ROW, // co RegionObserverExample-2-Cell Create cell indirectly using a Put instance.
         Bytes.toBytes(System.currentTimeMillis()));
       CellScanner scanner = put.cellScanner();
       scanner.advance();

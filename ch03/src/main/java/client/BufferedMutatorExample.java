@@ -18,8 +18,8 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.BufferedMutator;
 import org.apache.hadoop.hbase.client.BufferedMutatorParams;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.RetriesExhaustedWithDetailsException;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -59,7 +59,7 @@ public class BufferedMutatorExample {
       new BufferedMutatorParams(TABLE).listener(listener); // co BufferedMutatorExample-04-Params Create a parameter instance, set the table name and custom listener reference.
 
     try (
-      Connection conn = ConnectionFactory.createConnection(configuration); // co BufferedMutatorExample-05-Allocate Allocate the shared resources using the Java 7 try-with-resource pattern.
+      HConnection conn = HConnectionManager.createConnection(configuration); // co BufferedMutatorExample-05-Allocate Allocate the shared resources using the Java 7 try-with-resource pattern.
       BufferedMutator mutator = conn.getBufferedMutator(params)
     ) {
       ExecutorService workerPool = Executors.newFixedThreadPool(POOL_SIZE); // co BufferedMutatorExample-06-Pool Create a worker pool to update the shared mutator in parallel.

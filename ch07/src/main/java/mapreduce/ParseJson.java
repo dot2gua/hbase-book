@@ -81,7 +81,7 @@ public class ParseJson {
           JSONObject json = (JSONObject) parser.parse(value);
           for (Object key : json.keySet()) {
             Object val = json.get(key);
-            put.addColumn(columnFamily, Bytes.toBytes(key.toString()),
+            put.add(columnFamily, Bytes.toBytes(key.toString()),
               // co ParseJson-1-Put Store the top-level JSON keys as columns, with their value set as the column value.
               Bytes.toBytes(val.toString()));
           }

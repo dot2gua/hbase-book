@@ -6,19 +6,19 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.metrics.ScanMetrics;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 
 import util.HBaseHelper;
 
 public class ScanSlicingExample {
 
-  private static Table table = null;
+  private static HTableInterface table = null;
 
   // vv ScanSlicingExample
   private static void scan(int num, int caching, int batch, int offset,
@@ -54,7 +54,7 @@ public class ScanSlicingExample {
     helper.createTable("testtable", "colfam1", "colfam2");
     helper.fillTable("testtable", 1, 10, 10, 2, true, "colfam1", "colfam2");
 
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     table = connection.getTable(TableName.valueOf("testtable"));
 
     // vv ScanSlicingExample

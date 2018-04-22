@@ -6,8 +6,8 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.security.token.AuthenticationTokenIdentifier;
 import org.apache.hadoop.hbase.security.token.TokenUtil;
 
@@ -19,7 +19,7 @@ public class TokenExample {
 
   public static void main(String[] args) throws IOException, InterruptedException {
     Configuration conf = HBaseConfiguration.create();
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
 
     // vv TokenExample
     Token<AuthenticationTokenIdentifier> token =

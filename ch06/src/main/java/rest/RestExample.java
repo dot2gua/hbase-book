@@ -33,7 +33,7 @@ public class RestExample {
 
     Client client = new Client(cluster); // co RestExample-2-Client Create the client handling the HTTP communication.
 
-    RemoteHTable table = new RemoteHTable(client, "testtable"); // co RestExample-3-Table Create a remote table instance, wrapping the REST access into a familiar interface.
+    RemoteHTable table = new RemoteHTable(client, "testtable"); // co RestExample-3-HTableInterface Create a remote table instance, wrapping the REST access into a familiar interface.
 
     Get get = new Get(Bytes.toBytes("row-30")); // co RestExample-4-Get Perform a get operation as if it were a direct HBase connection.
     get.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("col-3"));

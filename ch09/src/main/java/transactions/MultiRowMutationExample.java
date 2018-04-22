@@ -12,14 +12,14 @@ import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Mutation;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.coprocessor.MultiRowMutationEndpoint;
 
 import org.apache.hadoop.hbase.ipc.CoprocessorRpcChannel;
@@ -36,7 +36,7 @@ public class MultiRowMutationExample {
   public static void main(String[] args) throws IOException,
     InterruptedException, ServiceException {
     Configuration conf = HBaseConfiguration.create();
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");
     TableName tableName = TableName.valueOf("testtable");
@@ -56,21 +56,21 @@ public class MultiRowMutationExample {
     // vv MultiRowMutationExample
     Admin admin = connection.getAdmin();
     admin.createTable(htd);
-    Table table = connection.getTable(tableName);
+    HTableInterface table = connection.getTable(tableName);
 
     // ^^ MultiRowMutationExample
     System.out.println("Filling table with test data...");
     // vv MultiRowMutationExample
     for (int i = 0; i < 10; i++) { // co MultiRowMutationExample-04-FillOne Fill first entity prefixed with two zeros, adding 10 rows.
       Put put = new Put(Bytes.toBytes("00-row" + i));
-      put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
+      put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
         Bytes.toBytes("val1"));
       table.put(put);
     }
 
     for (int i = 0; i < 10000; i++) { // co MultiRowMutationExample-05-FillTwo Fill second entity prefixed with two nines, adding 10k rows.
       Put put = new Put(Bytes.toBytes("99-row" + i));
-      put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
+      put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
         Bytes.toBytes("val1"));
       table.put(put);
     }
@@ -105,12 +105,12 @@ public class MultiRowMutationExample {
     MutateRowsRequest.Builder builder = MutateRowsRequest.newBuilder();
 
     Put put = new Put(Bytes.toBytes("00-row1"));
-    put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
+    put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
       Bytes.toBytes("val99999"));
     builder.addMutationRequest(ProtobufUtil.toMutation(
       ClientProtos.MutationProto.MutationType.PUT, put)); // co MultiRowMutationExample-09-AddPuts Add puts that address separate rows within the same entity (prefixed with two zeros).
     put = new Put(Bytes.toBytes("00-row5"));
-    put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
+    put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
       Bytes.toBytes("val99999"));
     builder.addMutationRequest(ProtobufUtil.toMutation(
     ClientProtos.MutationProto.MutationType.PUT, put));

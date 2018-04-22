@@ -8,12 +8,12 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 
 import org.apache.hadoop.hbase.quotas.QuotaFilter;
 import org.apache.hadoop.hbase.quotas.QuotaRetriever;
@@ -42,12 +42,12 @@ public class QuotaExample {
     helper.fillTable("foo:limited", 1, 10, 1, "cf1");
 
     // vv QuotaExample
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     TableName fooLimited = TableName.valueOf("foo:limited");
     TableName fooUnlimited = TableName.valueOf("foo:unlimited"); // co QuotaExample-1-Names Create the table name instances for the test tables.
     TableName barLimited = TableName.valueOf("bar:limited");
 
-    Table table = connection.getTable(fooLimited); // co QuotaExample-2-Tables Create a reference to the table and the admin API.
+    HTableInterface table = connection.getTable(fooLimited); // co QuotaExample-2-Tables Create a reference to the table and the admin API.
     Admin admin = connection.getAdmin();
 
     QuotaSettings qs = QuotaSettingsFactory.throttleTable(fooLimited, // co QuotaExample-3-Quota1 Configure a quota setting record at the table level, and assign it.

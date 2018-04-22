@@ -6,10 +6,10 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Delete;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import util.HBaseHelper;
@@ -31,8 +31,8 @@ public class DeleteExample {
     System.out.println("Before delete call...");
     helper.dump("testtable", new String[]{ "row1" }, null, null);
 
-    Connection connection = ConnectionFactory.createConnection(conf);
-    Table table = connection.getTable(TableName.valueOf("testtable"));
+    HConnection connection = HConnectionManager.createConnection(conf);
+    HTableInterface table = connection.getTable(TableName.valueOf("testtable"));
 
     // vv DeleteExample
     Delete delete = new Delete(Bytes.toBytes("row1")); // co DeleteExample-1-NewDel Create delete with specific row.
@@ -42,8 +42,8 @@ public class DeleteExample {
     delete.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1")); // co DeleteExample-3-DelColNoTS Delete the latest version only in one column.
     delete.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual3"), 3); // co DeleteExample-4-DelColTS Delete specific version in one column.
 
-    delete.addColumns(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1")); // co DeleteExample-5-DelColsNoTS Delete all versions in one column.
-    delete.addColumns(Bytes.toBytes("colfam1"), Bytes.toBytes("qual3"), 2); // co DeleteExample-6-DelColsTS Delete the given and all older versions in one column.
+    delete.deleteColumns(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1")); // co DeleteExample-5-DelColsNoTS Delete all versions in one column.
+    delete.deleteColumns(Bytes.toBytes("colfam1"), Bytes.toBytes("qual3"), 2); // co DeleteExample-6-DelColsTS Delete the given and all older versions in one column.
 
     delete.addFamily(Bytes.toBytes("colfam1")); // co DeleteExample-7-AddCol Delete entire family, all columns and versions.
     delete.addFamily(Bytes.toBytes("colfam1"), 3); // co DeleteExample-8-AddCol Delete the given and all older versions in the entire column family, i.e., from all columns therein.

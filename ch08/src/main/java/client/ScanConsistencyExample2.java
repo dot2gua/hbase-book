@@ -6,14 +6,14 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
-import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.HConnection;
+import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import util.HBaseHelper;
@@ -30,12 +30,12 @@ public class ScanConsistencyExample2 {
     System.out.println("Adding rows to table...");
     helper.fillTable("testtable", 1, 5, 2, "colfam1");
 
-    System.out.println("Table before the operations:");
+    System.out.println("HTableInterface before the operations:");
     helper.dump("testtable");
 
-    Connection connection = ConnectionFactory.createConnection(conf);
+    HConnection connection = HConnectionManager.createConnection(conf);
     TableName tableName = TableName.valueOf("testtable");
-    Table table = connection.getTable(tableName);
+    HTableInterface table = connection.getTable(tableName);
 
     Scan scan = new Scan();
     scan.setCaching(1);
@@ -47,7 +47,7 @@ public class ScanConsistencyExample2 {
 
     System.out.println("Applying mutations...");
     Put put = new Put(Bytes.toBytes("row-3"));
-    put.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("col-1"),
+    put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("col-1"),
       Bytes.toBytes("val-999"));
     table.put(put);
 
