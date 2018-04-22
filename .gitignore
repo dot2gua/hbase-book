@@ -3,3 +3,6 @@
 target/
 .idea/
 /cluster/ansible/files/
+.project
+.settings
+.classpath
