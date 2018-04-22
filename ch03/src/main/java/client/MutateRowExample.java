@@ -44,7 +44,7 @@ public class MutateRowExample {
       4, Bytes.toBytes("val100"));
 
     Delete delete = new Delete(Bytes.toBytes("row1"));
-    delete.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual2"));
+    delete.deleteColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual2"));
 
     RowMutations mutations = new RowMutations(Bytes.toBytes("row1"));
     mutations.add(put);

@@ -8,7 +8,7 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellScanner;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Result;
@@ -68,7 +68,7 @@ public class RenameTableExample {
     helper.fillTable("testtable", 1, 100, 100, "colfam1");
     // vv RenameTableExample
     HConnection connection = HConnectionManager.createConnection(conf);
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
     TableName name = TableName.valueOf("testtable");
 
     HTableInterface table = connection.getTable(name); // co RenameTableExample-07-Test1 Check the content of the original table. The helper method (see full source code) prints the first value of the first row.

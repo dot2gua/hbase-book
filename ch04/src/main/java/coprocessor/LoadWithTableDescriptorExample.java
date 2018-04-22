@@ -8,7 +8,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 
@@ -33,7 +33,7 @@ public class LoadWithTableDescriptorExample {
       RegionObserverExample.class.getCanonicalName() +
       "|" + Coprocessor.PRIORITY_USER);
 
-    Admin admin = connection.getAdmin(); // co LoadWithTableDescriptorExample-3-Admin Acquire an administrative API to the cluster and add the table.
+    HBaseAdmin admin = new HBaseAdmin(connection); // co LoadWithTableDescriptorExample-3-Admin Acquire an administrative API to the cluster and add the table.
     admin.createTable(htd);
 
     System.out.println(admin.getTableDescriptor(tableName)); // co LoadWithTableDescriptorExample-4-Check Verify if the definition has been applied as expected.

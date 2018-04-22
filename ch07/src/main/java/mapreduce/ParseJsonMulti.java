@@ -103,10 +103,10 @@ public class ParseJsonMulti {
           for (Object key : json.keySet()) {
             Object val = json.get(key);
             if ("link".equals(key)) {
-              linkPut.addColumn(columnFamily, Bytes.toBytes(key.toString()),
+              linkPut.add(columnFamily, Bytes.toBytes(key.toString()),
                 Bytes.toBytes(val.toString()));
             } else {
-              infoPut.addColumn(columnFamily, Bytes.toBytes(key.toString()),
+              infoPut.add(columnFamily, Bytes.toBytes(key.toString()),
                 Bytes.toBytes(val.toString()));
             }
           }

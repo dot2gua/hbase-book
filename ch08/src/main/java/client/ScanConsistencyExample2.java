@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Delete;
@@ -56,7 +56,7 @@ public class ScanConsistencyExample2 {
 
     System.out.println("Flushing and splitting table...");
     // vv ScanConsistencyExample2
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
     admin.flush(tableName); // co ScanConsistencyExample2-1-Flush Flush table and wait a little while for the operation to complete.
     try {
       Thread.currentThread().sleep(4000);

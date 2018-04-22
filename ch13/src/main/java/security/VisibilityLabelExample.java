@@ -9,7 +9,7 @@ import com.google.protobuf.ByteString;
 import org.apache.hadoop.conf.Configuration;
 
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Scan;
@@ -184,7 +184,7 @@ public class VisibilityLabelExample {
       @Override
       public Void run() throws Exception {
         HConnection connection = superuser.getConnection();
-        Admin admin = connection.getAdmin();
+        HBaseAdmin admin = new HBaseAdmin(connection);
 
         List<SecurityCapability> sc = admin.getSecurityCapabilities();
         System.out.println("Superuser: Available security capabilities:");

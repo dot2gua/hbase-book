@@ -7,7 +7,7 @@ import coprocessor.generated.RowCounterProtos;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.RegionLocator;
@@ -38,7 +38,7 @@ public class EndpointCombinedExample {
       new String[]{"row1", "row2", "row3", "row4", "row5"},
       null, null);
     HConnection connection = HConnectionManager.createConnection(conf);
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
     try {
       admin.split(TableName.valueOf("testtable"), Bytes.toBytes("row3"));
     } catch (IOException e) {

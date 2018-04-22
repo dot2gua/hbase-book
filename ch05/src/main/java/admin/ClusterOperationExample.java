@@ -11,7 +11,7 @@ import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HRegionLocation;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.BufferedMutator;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
@@ -47,7 +47,7 @@ public class ClusterOperationExample {
 
     // vv ClusterOperationExample
     HConnection connection = HConnectionManager.createConnection(conf);
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
 
     TableName tableName = TableName.valueOf("testtable");
     HColumnDescriptor coldef1 = new HColumnDescriptor("colfam1");

@@ -15,7 +15,7 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Result;
@@ -227,7 +227,7 @@ public class AnalyzeSnapshotData {
 
     // vv AnalyzeSnapshotData
     HConnection connection = HConnectionManager.createConnection(conf);
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
     LOG.info("Performing snapshot of table " + table + " as " + snapshot);
     admin.snapshot(snapshot, TableName.valueOf(table)); // co AnalyzeSnapshotData-2-Snap Create a snapshot of the table.
 

@@ -9,7 +9,7 @@ import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HRegionLocation;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.RegionLocator;
@@ -25,7 +25,7 @@ public class ServerAndRegionNameExample {
     HBaseHelper helper = HBaseHelper.getHelper(conf);
     helper.dropTable("testtable");
     HConnection connection = HConnectionManager.createConnection(conf);
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
 
     // vv ServerAndRegionNameExample
     TableName tableName = TableName.valueOf("testtable");

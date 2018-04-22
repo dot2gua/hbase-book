@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Delete;
@@ -33,7 +33,7 @@ public class DeleteTimestampExample {
 
     TableName tableName = TableName.valueOf("testtable");
     HTableInterface table = connection.getTable(tableName);
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
 
     // vv DeleteTimestampExample
     for (int count = 1; count <= 6; count++) { // co DeleteTimestampExample-1-Put Store the same column six times.

@@ -7,7 +7,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -25,7 +25,7 @@ public class CreateTableExample {
     helper.dropTable("testtable");
     // vv CreateTableExample
     HConnection connection = HConnectionManager.createConnection(conf);
-    Admin admin = connection.getAdmin(); // co CreateTableExample-1-CreateAdmin Create a administrative API instance.
+    HBaseAdmin admin = new HBaseAdmin(connection); // co CreateTableExample-1-CreateAdmin Create a administrative API instance.
 
     TableName tableName = TableName.valueOf("testtable");
     HTableDescriptor desc = new HTableDescriptor(tableName); // co CreateTableExample-2-CreateHTD Create the table descriptor instance.

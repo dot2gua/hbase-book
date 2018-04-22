@@ -60,7 +60,7 @@ public class AccessControlExample {
       @Override
       public Void run() throws Exception {
         HConnection connection = superuser.getConnection(); // co AccessControlExample-03-GetConn Get dedicated connection for authenticated user.
-        Admin admin = connection.getAdmin();
+        HBaseAdmin admin = new HBaseAdmin(connection);
         HTableInterface table = connection.getTable(tableName);
 
         List<SecurityCapability> sc = admin.getSecurityCapabilities(); // co AccessControlExample-04-ListCaps List the security capabilities as reported from the Master.

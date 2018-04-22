@@ -38,16 +38,16 @@ public class ValueNotNullFilterExample {
     HTableInterface table = connection.getTable(TableName.valueOf("testtable"));
 
     Put put = new Put(Bytes.toBytes("row-5"))
-      .addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("col-6"),
+      .add(Bytes.toBytes("colfam1"), Bytes.toBytes("col-6"),
         Bytes.toBytes("val-6"));
     table.put(put);
     put = new Put(Bytes.toBytes("row-8"))
-      .addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("col-6"),
+      .add(Bytes.toBytes("colfam1"), Bytes.toBytes("col-6"),
         Bytes.toBytes("val-6"));
     table.put(put);
 
     Delete delete = new Delete(Bytes.toBytes("row-5"))
-      .addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("col-3"));
+      .deleteColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("col-3"));
     table.delete(delete);
 
     // vv ValueNotNullFilterExample

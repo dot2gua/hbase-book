@@ -32,7 +32,7 @@ public class PutWriteBufferExample1 {
     BufferedMutator mutator = connection.getBufferedMutator(name); // co PutWriteBufferExample1-1-CheckFlush Get a mutator instance for the table.
 
     Put put1 = new Put(Bytes.toBytes("row1"));
-    put1.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
+    put1.add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1"),
       Bytes.toBytes("val1"));
     mutator.mutate(put1); // co PutWriteBufferExample1-2-DoPut Store some rows with columns into HBase.
 

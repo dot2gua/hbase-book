@@ -39,14 +39,14 @@ public class DeleteExample {
 
     delete.setTimestamp(1); // co DeleteExample-2-SetTS Set timestamp for row deletes.
 
-    delete.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1")); // co DeleteExample-3-DelColNoTS Delete the latest version only in one column.
-    delete.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual3"), 3); // co DeleteExample-4-DelColTS Delete specific version in one column.
+    delete.deleteColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1")); // co DeleteExample-3-DelColNoTS Delete the latest version only in one column.
+    delete.deleteColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual3"), 3); // co DeleteExample-4-DelColTS Delete specific version in one column.
 
     delete.deleteColumns(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1")); // co DeleteExample-5-DelColsNoTS Delete all versions in one column.
     delete.deleteColumns(Bytes.toBytes("colfam1"), Bytes.toBytes("qual3"), 2); // co DeleteExample-6-DelColsTS Delete the given and all older versions in one column.
 
-    delete.addFamily(Bytes.toBytes("colfam1")); // co DeleteExample-7-AddCol Delete entire family, all columns and versions.
-    delete.addFamily(Bytes.toBytes("colfam1"), 3); // co DeleteExample-8-AddCol Delete the given and all older versions in the entire column family, i.e., from all columns therein.
+    delete.deleteFamily(Bytes.toBytes("colfam1")); // co DeleteExample-7-AddCol Delete entire family, all columns and versions.
+    delete.deleteFamily(Bytes.toBytes("colfam1"), 3); // co DeleteExample-8-AddCol Delete the given and all older versions in the entire column family, i.e., from all columns therein.
 
     table.delete(delete); // co DeleteExample-9-DoDel Delete the data from the HBase table.
 

@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.HTableInterface;
@@ -40,7 +40,7 @@ public class EndpointExample {
     helper.dump("testtable",
       new String[]{"row1", "row2", "row3", "row4", "row5"},
       null, null);
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
     try {
       admin.split(tableName, Bytes.toBytes("row3"));
     } catch (IOException e) {

@@ -16,10 +16,10 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.NamespaceDescriptor;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.Durability;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
-import org.apache.hadoop.hbase.client.Durability;
 import org.apache.hadoop.hbase.io.compress.Compression;
 import org.apache.hadoop.hbase.regionserver.BloomType;
 
@@ -73,7 +73,7 @@ public class SchemaManager {
 
   private Configuration conf = null;
   private HConnection connection = null;
-  private Admin admin = null;
+  private HBaseAdmin admin = null;
   private XMLConfiguration config = null;
   private ArrayList<NamespaceDescriptor> namespaces = null;
   private ArrayList<HTableDescriptor> schemas = null;
@@ -241,7 +241,7 @@ public class SchemaManager {
    */
   public void process() throws IOException {
     connection = HConnectionManager.createConnection(conf);
-    admin = connection.getAdmin();
+    admin = new HBaseAdmin(connection);
     for (final NamespaceDescriptor descriptor : namespaces) {
       createOrChangeNamespace(descriptor);
     }

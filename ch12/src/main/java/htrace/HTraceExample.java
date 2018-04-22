@@ -14,7 +14,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.trace.HBaseHTraceConfiguration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 
@@ -61,7 +61,7 @@ public class HTraceExample {
       ts0.close();
     }
 
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
     admin.flush(TableName.valueOf("testtable"));
     Thread.sleep(3000);
 

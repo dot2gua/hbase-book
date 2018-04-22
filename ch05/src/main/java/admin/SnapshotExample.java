@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Delete;
@@ -41,7 +41,7 @@ public class SnapshotExample {
     HConnection connection = HConnectionManager.createConnection(conf);
     TableName tableName = TableName.valueOf("testtable");
     HTableInterface table = connection.getTable(tableName);
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
 
     /*
     When you try to snapshot with an existing name:
@@ -60,7 +60,7 @@ public class SnapshotExample {
     System.out.println("Snapshots after snapshot 1: " + snaps);
 
     Delete delete = new Delete(Bytes.toBytes("row1"));
-    delete.addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1")); // co SnapshotExample-2-Delete Remove one column and do two more snapshots, one without first flushing, then another with a preceding flush.
+    delete.deleteColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual1")); // co SnapshotExample-2-Delete Remove one column and do two more snapshots, one without first flushing, then another with a preceding flush.
     table.delete(delete);
 
     admin.snapshot("snapshot2", tableName,
@@ -72,7 +72,7 @@ public class SnapshotExample {
     System.out.println("Snapshots after snapshot 2 & 3: " + snaps);
 
     Put put = new Put(Bytes.toBytes("row2"))
-      .addColumn(Bytes.toBytes("colfam1"), Bytes.toBytes("qual10"),
+      .add(Bytes.toBytes("colfam1"), Bytes.toBytes("qual10"),
         // co SnapshotExample-3-Put Add a new row to the table and take yet another snapshot.
         Bytes.toBytes("val10"));
     table.put(put);

@@ -5,7 +5,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HRegionLocation;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Get;
@@ -84,7 +84,7 @@ public class MissingRegionExample {
     printTableRegions();
 
     // vv MissingRegionExample
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
 
     Thread thread = new Thread(new Getter()); // co MissingRegionExample-4-Start Start the asynchronous thread.
     thread.setDaemon(true);

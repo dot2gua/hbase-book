@@ -7,7 +7,7 @@ import org.apache.hadoop.conf.Configuration;
 
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.Result;
@@ -48,7 +48,7 @@ public class QuotaExample {
     TableName barLimited = TableName.valueOf("bar:limited");
 
     HTableInterface table = connection.getTable(fooLimited); // co QuotaExample-2-Tables Create a reference to the table and the admin API.
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
 
     QuotaSettings qs = QuotaSettingsFactory.throttleTable(fooLimited, // co QuotaExample-3-Quota1 Configure a quota setting record at the table level, and assign it.
       ThrottleType.READ_NUMBER, 5, TimeUnit.DAYS);

@@ -8,7 +8,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 
@@ -30,7 +30,7 @@ public class LoadWithTableDescriptorExample2 {
     /*[*/htd.addCoprocessor(RegionObserverExample.class.getCanonicalName(),
       null, Coprocessor.PRIORITY_USER, null);/*]*/ // co LoadWithTableDescriptorExample2-2-AddCP Use the provided method to add the coprocessor.
 
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
     admin.createTable(htd);
     // ^^ LoadWithTableDescriptorExample2
 

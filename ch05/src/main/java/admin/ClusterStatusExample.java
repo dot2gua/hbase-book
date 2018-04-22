@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -18,7 +18,7 @@ public class ClusterStatusExample {
     Configuration conf = HBaseConfiguration.create();
 
     HConnection connection = HConnectionManager.createConnection(conf);
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
 
     // vv ClusterStatusExample
     ClusterStatus status = admin.getClusterStatus(); // co ClusterStatusExample-1-GetStatus Get the cluster status.

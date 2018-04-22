@@ -7,7 +7,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -26,7 +26,7 @@ public class ModifyTableExample {
 
     HConnection connection = HConnectionManager.createConnection(conf);
     // vv ModifyTableExample
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
     TableName tableName = TableName.valueOf("testtable");
     HColumnDescriptor coldef1 = new HColumnDescriptor("colfam1");
     HTableDescriptor desc = new HTableDescriptor(tableName)

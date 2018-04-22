@@ -7,7 +7,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.RegionLocator;
@@ -50,7 +50,7 @@ public class CreateTableWithRegionsExample {
     helper.dropTable("testtable1");
     helper.dropTable("testtable2");
     // vv CreateTableWithRegionsExample
-    Admin admin = connection.getAdmin();
+    HBaseAdmin admin = new HBaseAdmin(connection);
 
     HTableDescriptor desc = new HTableDescriptor(
       TableName.valueOf("testtable1"));
